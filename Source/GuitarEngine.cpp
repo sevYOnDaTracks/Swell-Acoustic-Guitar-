@@ -20,7 +20,7 @@ GuitarEngine::Voice& GuitarEngine::startVoice(int key,int note,float velocity,in
  if(!slot){slot=&voices[0];for(auto& v:voices)if(v.age<slot->age)slot=&v;}
  auto pick=current->pick(note,velocity,roundRobin);auto& v=*slot;v=Voice{};
  v.sample=pick.sample;v.root=pick.root;v.key=key;v.held=true;v.age=++ageCounter;v.delay=offset;
- v.semis=v.targetSemis=(float)(note-pick.root);
+ v.semis=v.targetSemis=(float)(note-pick.root)-v.sample->tune;
  v.pos=std::min((double)v.sample->audio.getNumSamples()-4,startSeconds*v.sample->rate);
  v.amp=.25f+.75f*velocity;v.attackStep=1.f/std::max(1.f,attackSeconds*(float)rate);
  v.palm=s.palm&&s.palmAmount>5;

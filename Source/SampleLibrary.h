@@ -4,7 +4,8 @@
 #include <vector>
 
 // One recorded (or synthesised) note. Mono or stereo, at its own sample rate.
-struct Sample {int root=60;juce::AudioBuffer<float> audio;double rate=44100;};
+// tune: how sharp the recording is, in semitones (played back that much lower).
+struct Sample {int root=60;float tune=0;juce::AudioBuffer<float> audio;double rate=44100;};
 
 // Samples grouped by root note, then velocity layer (soft -> hard), then round-robin takes.
 class SampleLibrary {
@@ -16,8 +17,8 @@ public:
  // Octaves are shifted so the lowest note lands in C2..B2 (guitar low E = E2), whatever
  // naming convention (C3, C4 or C5 = middle C) the recording software used.
  static std::unique_ptr<SampleLibrary> load(const juce::File& folder,juce::String& report);
- // One embedded WAV played across the whole keyboard (built-in sound of each guitar type).
- static std::unique_ptr<SampleLibrary> single(const void* wavData,size_t size,int note,const juce::String& name);
+ // One embedded audio file (WAV, FLAC...) played across the whole keyboard: a built-in model.
+ static std::unique_ptr<SampleLibrary> single(const void* data,size_t size,int note,float cents,const juce::String& name);
  // Karplus-Strong plucked strings, used until real samples are loaded.
  static std::unique_ptr<SampleLibrary> synth(double rate=44100);
 

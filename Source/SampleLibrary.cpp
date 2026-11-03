@@ -70,9 +70,10 @@ std::unique_ptr<SampleLibrary> SampleLibrary::load(const juce::File& folder,juce
  if(skipped+failed>0)report<<", "<<(skipped+failed)<<" fichier(s) ignore(s)";
  return lib;}
 
-std::unique_ptr<SampleLibrary> SampleLibrary::single(const void* wavData,size_t size,int note,const juce::String& name){
- juce::WavAudioFormat wav;std::unique_ptr<juce::AudioFormatReader> reader(wav.createReaderFor(new juce::MemoryInputStream(wavData,size,false),true));
- if(!reader)return nullptr;auto s=readSample(*reader,note);if(!s)return nullptr;
+std::unique_ptr<SampleLibrary> SampleLibrary::single(const void* data,size_t size,int note,float cents,const juce::String& name){
+ juce::AudioFormatManager formats;formats.registerBasicFormats();
+ std::unique_ptr<juce::AudioFormatReader> reader(formats.createReaderFor(std::make_unique<juce::MemoryInputStream>(data,size,false)));
+ if(!reader)return nullptr;auto s=readSample(*reader,note);if(!s)return nullptr;s->tune=cents/100;
  // Built-ins come from different sources: same peak, so the presets drive the amp the same way whatever the file.
  s->audio.applyGain(.3f/std::max(s->audio.getMagnitude(0,s->audio.getNumSamples()),1e-6f));
  auto lib=std::make_unique<SampleLibrary>();lib->name=name;lib->add(std::move(s),1);return lib;}

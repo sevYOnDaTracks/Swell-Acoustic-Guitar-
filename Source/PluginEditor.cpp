@@ -90,7 +90,8 @@ GuitarEditor::GuitarEditor(GuitarProcessor& p):AudioProcessorEditor(p),proc(p){
  photos[1]=juce::ImageCache::getFromMemory(BinaryData::guitarphotoelectric_jpg,BinaryData::guitarphotoelectric_jpgSize);
  // Film grain, generated once.
  grain=juce::Image(juce::Image::ARGB,590,225,true);{std::mt19937 r(3);std::uniform_int_distribution<int> d(0,255);for(int y=0;y<grain.getHeight();++y)for(int x=0;x<grain.getWidth();++x){int v=d(r);grain.setPixelAt(x,y,juce::Colour((juce::uint8)v,(juce::uint8)v,(juce::uint8)v,(juce::uint8)18));}}
- for(int t=0;t<guitarTypeCount;++t)guitar.addItem(utf8(guitarTypes[(size_t)t])+"  /  "+utf8(guitarModels[(size_t)t]),t+1);
+ for(int t=0;t<guitarTypeCount;++t)guitar.addItem(utf8(guitarTypes[(size_t)t]),t+1);
+ model.onChange=[this]{int i=model.getSelectedId()-1;if(i>=0)proc.selectModel(proc.guitarType(),i);};
  // Changing guitar loads that guitar's first preset, so the amp and EQ suit it straight away.
  guitar.onChange=[this]{int t=guitar.getSelectedId()-1;if(t>=0&&t!=proc.guitarType())proc.setCurrentProgram(firstPreset(t));};
  for(int t=0;t<guitarTypeCount;++t){preset.addSectionHeading(utf8(guitarTypes[(size_t)t]));for(int i=0;i<presetCount;++i)if(presets[(size_t)i].type==t)preset.addItem(utf8(presets[(size_t)i].name),i+1);}
@@ -107,7 +108,7 @@ GuitarEditor::GuitarEditor(GuitarProcessor& p):AudioProcessorEditor(p),proc(p){
   [](float v){return juce::String(reverbSeconds(v),1)+" s";},pct,[](float v){return v<=0?juce::String("-inf"):juce::String(juce::Decibels::gainToDecibels(outputGain(v)/.9f),1)+" dB";}};
  for(int i=0;i<fxKnobCount;++i){fxKnobsUi.push_back(std::make_unique<Knob>(proc,fxKnobs[(size_t)i].id,utf8(fxKnobs[(size_t)i].label),fxFormats[(size_t)i]));addAndMakeVisible(*fxKnobsUi.back());}
  for(int i=0;i<4;++i){chordButtons[(size_t)i].setButtonText(chordNames[(size_t)i]);chordButtons[(size_t)i].onClick=[this,i]{proc.setValue("chord",(float)i);};addAndMakeVisible(chordButtons[(size_t)i]);}
- for(juce::Component* c:{(juce::Component*)&guitar,(juce::Component*)&preset,(juce::Component*)&loadButton,(juce::Component*)&keys})addAndMakeVisible(c);
+ for(juce::Component* c:{(juce::Component*)&guitar,(juce::Component*)&model,(juce::Component*)&preset,(juce::Component*)&loadButton,(juce::Component*)&keys})addAndMakeVisible(c);
  setSize(1180,940);timerCallback();startTimerHz(60);}
 GuitarEditor::~GuitarEditor(){stopTimer();setLookAndFeel(nullptr);}
 
@@ -117,7 +118,10 @@ void GuitarEditor::chooseFolder(){
 
 void GuitarEditor::timerCallback(){
  int program=proc.getCurrentProgram();if(program!=shownProgram){shownProgram=program;preset.setSelectedId(program+1,juce::dontSendNotification);}
- int type=proc.guitarType();if(type!=shownType){shownType=type;guitar.setSelectedId(type+1,juce::dontSendNotification);repaint();}
+ int type=proc.guitarType();if(type!=shownType){shownType=type;guitar.setSelectedId(type+1,juce::dontSendNotification);repaint();
+  // Each guitar has its own list of built-in samples.
+  model.clear(juce::dontSendNotification);for(int i=0;i<modelsOfType(type);++i)model.addItem(models[(size_t)(modelFirst(type)+i)].name,i+1);shownModel=-1;}
+ int m=selectedModelIndex();if(m!=shownModel){shownModel=m;model.setSelectedId(m+1,juce::dontSendNotification);}
  int chord=(int)proc.value("chord");for(int i=0;i<4;++i)chordButtons[(size_t)i].setToggleState(i==chord,juce::dontSendNotification);
  for(int i=0;i<moduleCount;++i){bool on=switches[(size_t)i].getToggleState();auto& k=*moduleKnobs[(size_t)i];if(k.active!=on){k.active=on;k.slider.getProperties().set("active",on);k.repaint();}}
  std::vector<int> notes;for(int n=0;n<128;++n)if(proc.engine.isSounding(n))notes.push_back(n);
@@ -134,7 +138,7 @@ void GuitarEditor::timerCallback(){
  repaint(0,0,getWidth(),450);keys.repaint();}
 
 void GuitarEditor::resized(){
- loadButton.setBounds(720,22,110,30);guitar.setBounds(838,22,150,30);preset.setBounds(998,22,150,30);
+ loadButton.setBounds(560,22,110,30);guitar.setBounds(678,22,120,30);model.setBounds(806,22,180,30);preset.setBounds(994,22,154,30);
  float col=1116.f/moduleCount;
  for(int i=0;i<moduleCount;++i){int x=32+(int)(i*col);switches[(size_t)i].setBounds(x+(int)col-50,474,44,30);moduleKnobs[(size_t)i]->setBounds(x+16,546,(int)col-24,46);}
  // FX groups share the width by weight, like the prototype.
@@ -183,4 +187,4 @@ void GuitarEditor::paint(juce::Graphics& g){
  std::array<float,6> grow{2,1,3,2,2,1};float total=0;for(float w:grow)total+=w;float x=32;
  for(size_t gi=0;gi<fxGroups.size();++gi){float w=1116*grow[gi]/total;if(gi>0){g.setColour(rule);g.fillRect(x,640.f,1.f,100.f);}drawLabel(g,gi==0&&proc.guitarType()==1?juce::String("AMPLI + BAFFLE"):utf8(fxGroups[gi].name),x+14,638,w-20,16,11,soft,juce::Justification::centredLeft,true,.2f);x+=w;}
  drawLabel(g,utf8(presets[(size_t)proc.getCurrentProgram()].name)+"  /  "+utf8(guitarTypes[(size_t)proc.guitarType()])+"  /  "+(proc.usingSamples()?"samples":utf8("synthèse provisoire")),32,912,600,14,10.5f,faint);
- drawLabel(g,"Swell-audio  /  0.2  /  by @sevyondatracks",700,912,448,14,10.5f,faint,juce::Justification::centredRight);}
+ drawLabel(g,"Swell-audio  /  0.3  /  by @sevyondatracks",700,912,448,14,10.5f,faint,juce::Justification::centredRight);}
