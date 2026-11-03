@@ -1,0 +1,857 @@
+[
+ {
+  "type": 0,
+  "name": "6ix",
+  "file": "Acoustique/6ix.flac",
+  "root": 48,
+  "cents": 0,
+  "source": "Guitar_6ix.wav",
+  "why": "attaque 38 ms, extinction -24.0 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Bamboo",
+  "file": "Acoustique/Bamboo.flac",
+  "root": 60,
+  "cents": 9,
+  "source": "Guitar - Bamboo.wav",
+  "why": "attaque 29 ms, extinction -20.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Big",
+  "file": "Acoustique/Big.flac",
+  "root": 60,
+  "cents": -3,
+  "source": "Guitar - Big.wav",
+  "why": "attaque 11 ms, extinction -15.4 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "CLA",
+  "file": "Acoustique/CLA.flac",
+  "root": 84,
+  "cents": 12,
+  "source": "Guitar_CLA.wav",
+  "why": "attaque 11 ms, extinction -38.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Fish",
+  "file": "Acoustique/Fish.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Guitar - Fish.wav",
+  "why": "attaque 19 ms, extinction -14.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Flema",
+  "file": "Acoustique/Flema.flac",
+  "root": 60,
+  "cents": -1,
+  "source": "Guitar - Flema.wav",
+  "why": "attaque 13 ms, extinction -20.0 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Goat",
+  "file": "Acoustique/Goat.flac",
+  "root": 60,
+  "cents": -11,
+  "source": "Guitar_Goat.wav",
+  "why": "attaque 10 ms, extinction -17.6 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Guitar A",
+  "file": "Acoustique/Guitar_A.flac",
+  "root": 55,
+  "cents": -1,
+  "source": "guitar - A (1).wav",
+  "why": "attaque 21 ms, extinction -11.7 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Guitar B",
+  "file": "Acoustique/Guitar_B.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Guitar - B (1).wav",
+  "why": "attaque 19 ms, extinction -15.0 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Guitar C",
+  "file": "Acoustique/Guitar_C.flac",
+  "root": 72,
+  "cents": 0,
+  "source": "Guitar - C (1).wav",
+  "why": "attaque 20 ms, extinction -21.1 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Guitar D",
+  "file": "Acoustique/Guitar_D.flac",
+  "root": 60,
+  "cents": -2,
+  "source": "Guitar - D (1).wav",
+  "why": "attaque 13 ms, extinction -10.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Guitar E",
+  "file": "Acoustique/Guitar_E.flac",
+  "root": 72,
+  "cents": -1,
+  "source": "Guitar - E (1).wav",
+  "why": "attaque 16 ms, extinction -17.6 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Harp",
+  "file": "Acoustique/Harp.flac",
+  "root": 60,
+  "cents": 7,
+  "source": "Guitar - Harp.wav",
+  "why": "attaque 20 ms, extinction -22.4 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Kuun",
+  "file": "Acoustique/Kuun.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Guitar - Kuun.wav",
+  "why": "attaque 38 ms, extinction -11.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Lean",
+  "file": "Acoustique/Lean.flac",
+  "root": 72,
+  "cents": 6,
+  "source": "Guitar_Lean.wav",
+  "why": "attaque 11 ms, extinction -35.0 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Light",
+  "file": "Acoustique/Light.flac",
+  "root": 48,
+  "cents": -27,
+  "source": "Guitar - Light.wav",
+  "why": "attaque 14 ms, extinction -16.7 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Luffy",
+  "file": "Acoustique/Luffy.flac",
+  "root": 60,
+  "cents": 4,
+  "source": "Guitar - Luffy.wav",
+  "why": "attaque 38 ms, extinction -21.8 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Mellow",
+  "file": "Acoustique/Mellow.flac",
+  "root": 60,
+  "cents": -2,
+  "source": "Guitar - Mellow.wav",
+  "why": "attaque 24 ms, extinction -12.5 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Naruto",
+  "file": "Acoustique/Naruto.flac",
+  "root": 60,
+  "cents": 17,
+  "source": "Doza - Naruto Guitar no FX.wav",
+  "why": "attaque 5 ms, extinction -23.8 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Naruto FX",
+  "file": "Acoustique/Naruto_FX.flac",
+  "root": 60,
+  "cents": -13,
+  "source": "Doza - Naruto Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 0,
+  "name": "Obito",
+  "file": "Acoustique/Obito.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Doza - Obito Guitar no fx.wav",
+  "why": "attaque 17 ms, extinction -14.4 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Obito FX",
+  "file": "Acoustique/Obito_FX.flac",
+  "root": 60,
+  "cents": 7,
+  "source": "Doza - Obito Guitar w fx.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 0,
+  "name": "Plucked",
+  "file": "Acoustique/Plucked.flac",
+  "root": 60,
+  "cents": -2,
+  "source": "guitar - plucked.wav",
+  "why": "attaque de médiator brillante, extinction rapide"
+ },
+ {
+  "type": 0,
+  "name": "RC20",
+  "file": "Acoustique/RC20.flac",
+  "root": 60,
+  "cents": -3,
+  "source": "Guitar - RC20 - acous.wav",
+  "why": "nom"
+ },
+ {
+  "type": 0,
+  "name": "Real",
+  "file": "Acoustique/Real.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Guitar - Real.wav",
+  "why": "attaque 9 ms, extinction -24.4 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Sakura",
+  "file": "Acoustique/Sakura.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "Doza - Sakura Guitar no FX.wav",
+  "why": "attaque 9 ms, extinction -13.6 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Sakura FX",
+  "file": "Acoustique/Sakura_FX.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Doza - Sakura Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 0,
+  "name": "Sasuke",
+  "file": "Acoustique/Sasuke.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Doza - Sasuke Guitar no FX.wav",
+  "why": "attaque 12 ms, extinction -24.2 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Sasuke FX",
+  "file": "Acoustique/Sasuke_FX.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Doza - Sasuke Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 0,
+  "name": "Stick",
+  "file": "Acoustique/Stick.flac",
+  "root": 60,
+  "cents": 8,
+  "source": "Guitar - Stick.wav",
+  "why": "attaque 21 ms, extinction -14.4 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Stringy",
+  "file": "Acoustique/Stringy.flac",
+  "root": 72,
+  "cents": 1,
+  "source": "Guitar - Stringy.wav",
+  "why": "attaque 10 ms, extinction -13.9 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Talk",
+  "file": "Acoustique/Talk.flac",
+  "root": 72,
+  "cents": 23,
+  "source": "Guitar_Talk.wav",
+  "why": "attaque 10 ms, extinction -36.9 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Third",
+  "file": "Acoustique/Third.flac",
+  "root": 72,
+  "cents": 6,
+  "source": "Guitar_Third.wav",
+  "why": "attaque 11 ms, extinction -14.9 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Travis",
+  "file": "Acoustique/Travis.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Guitar - Travis.wav",
+  "why": "attaque 16 ms, extinction -16.2 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "True",
+  "file": "Acoustique/True.flac",
+  "root": 48,
+  "cents": -9,
+  "source": "Guitar_True.wav",
+  "why": "attaque 25 ms, extinction -21.3 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Wenna",
+  "file": "Acoustique/Wenna.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Guitar - Wenna.wav",
+  "why": "attaque 16 ms, extinction -12.5 dB/s"
+ },
+ {
+  "type": 0,
+  "name": "Zamboni",
+  "file": "Acoustique/Zamboni.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Guitar - Zamboni.wav",
+  "why": "attaque 55 ms, extinction -14.4 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Bean",
+  "file": "Electrique/Bean.flac",
+  "root": 48,
+  "cents": -3,
+  "source": "Guitar - Bean.wav",
+  "why": "swell 504 ms"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar A",
+  "file": "Electrique/BGuitar_A.flac",
+  "root": 36,
+  "cents": -5,
+  "source": "BGuitar - A (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar B",
+  "file": "Electrique/BGuitar_B.flac",
+  "root": 48,
+  "cents": 0,
+  "source": "BGuitar - B (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar C",
+  "file": "Electrique/BGuitar_C.flac",
+  "root": 48,
+  "cents": -5,
+  "source": "BGuitar - C (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar D",
+  "file": "Electrique/BGuitar_D.flac",
+  "root": 48,
+  "cents": -1,
+  "source": "BGuitar - D (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar E",
+  "file": "Electrique/BGuitar_E.flac",
+  "root": 48,
+  "cents": 0,
+  "source": "BGuitar - E (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "BGuitar F",
+  "file": "Electrique/BGuitar_F.flac",
+  "root": 48,
+  "cents": -1,
+  "source": "BGuitar - F (1).wav",
+  "why": "grave, type basse"
+ },
+ {
+  "type": 1,
+  "name": "Broom",
+  "file": "Electrique/Broom.flac",
+  "root": 48,
+  "cents": 8,
+  "source": "Guitar - Broom.wav",
+  "why": "swell 93 ms"
+ },
+ {
+  "type": 1,
+  "name": "Burst",
+  "file": "Electrique/Burst.flac",
+  "root": 60,
+  "cents": -20,
+  "source": "guitar - burst.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Command",
+  "file": "Electrique/Command.flac",
+  "root": 60,
+  "cents": -9,
+  "source": "guitar - command.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Dirt",
+  "file": "Electrique/Dirt.flac",
+  "root": 48,
+  "cents": -5,
+  "source": "guitar - dirt.wav",
+  "why": "nom"
+ },
+ {
+  "type": 1,
+  "name": "Done",
+  "file": "Electrique/Done.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "guitar - done.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Droid",
+  "file": "Electrique/Droid.flac",
+  "root": 60,
+  "cents": -1,
+  "source": "guitar - droid.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Dyno",
+  "file": "Electrique/Dyno.flac",
+  "root": 72,
+  "cents": 3,
+  "source": "Guitar - Dyno.wav",
+  "why": "swell 120 ms"
+ },
+ {
+  "type": 1,
+  "name": "Electric",
+  "file": "Electrique/Electric.flac",
+  "root": 60,
+  "cents": 8,
+  "source": "guitar - electric.wav",
+  "why": "nom"
+ },
+ {
+  "type": 1,
+  "name": "Fender",
+  "file": "Electrique/Fender.flac",
+  "root": 48,
+  "cents": -2,
+  "source": "guitar - fender.wav",
+  "why": "nom"
+ },
+ {
+  "type": 1,
+  "name": "Finnin",
+  "file": "Electrique/Finnin.flac",
+  "root": 60,
+  "cents": -1,
+  "source": "Guitar - Finnin.wav",
+  "why": "swell 114 ms"
+ },
+ {
+  "type": 1,
+  "name": "Fox",
+  "file": "Electrique/Fox.flac",
+  "root": 48,
+  "cents": 4,
+  "source": "Guitar - Fox.wav",
+  "why": "sustain -3.2 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Hours",
+  "file": "Electrique/Hours.flac",
+  "root": 60,
+  "cents": 3,
+  "source": "guitar - hours.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Itachi",
+  "file": "Electrique/Itachi.flac",
+  "root": 60,
+  "cents": 4,
+  "source": "Doza - Itachi Guitar no FX.wav",
+  "why": "sustain -4.7 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Itachi FX",
+  "file": "Electrique/Itachi_FX.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "Doza - Itachi Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 1,
+  "name": "Kakashi",
+  "file": "Electrique/Kakashi.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Doza - Kakashi Guitar no FX.wav",
+  "why": "sustain -8.4 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Kakashi FX",
+  "file": "Electrique/Kakashi_FX.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "Doza - Kakashi Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 1,
+  "name": "Kanye",
+  "file": "Electrique/Kanye.flac",
+  "root": 48,
+  "cents": 30,
+  "source": "Doza - Kanye Guitar no FX.wav",
+  "why": "swell 292 ms"
+ },
+ {
+  "type": 1,
+  "name": "Kanye FX",
+  "file": "Electrique/Kanye_FX.flac",
+  "root": 48,
+  "cents": -7,
+  "source": "Doza - Kanye Guitar w FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 1,
+  "name": "Leave",
+  "file": "Electrique/Leave.flac",
+  "root": 60,
+  "cents": -5,
+  "source": "Guitar - Leave.wav",
+  "why": "sustain -7.3 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Lee",
+  "file": "Electrique/Lee.flac",
+  "root": 48,
+  "cents": -2,
+  "source": "Doza - Lee Guitar.wav",
+  "why": "sustain -2.2 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Lifeguard",
+  "file": "Electrique/Lifeguard.flac",
+  "root": 48,
+  "cents": -27,
+  "source": "Guitar - Lifeguard.wav",
+  "why": "swell 126 ms"
+ },
+ {
+  "type": 1,
+  "name": "Lunch",
+  "file": "Electrique/Lunch.flac",
+  "root": 60,
+  "cents": 7,
+  "source": "Guitar - Lunch.wav",
+  "why": "sustain -5.3 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Madara",
+  "file": "Electrique/Madara.flac",
+  "root": 60,
+  "cents": -6,
+  "source": "Doza - Madara Guitar no FX.wav",
+  "why": "swell 103 ms"
+ },
+ {
+  "type": 1,
+  "name": "Madara FX",
+  "file": "Electrique/Madara_FX.flac",
+  "root": 60,
+  "cents": -3,
+  "source": "Doza - Madara Guitar with FX.wav",
+  "why": "suit la version sans FX"
+ },
+ {
+  "type": 1,
+  "name": "Mouse",
+  "file": "Electrique/Mouse.flac",
+  "root": 60,
+  "cents": -6,
+  "source": "guitar - mouse.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Ninnie",
+  "file": "Electrique/Ninnie.flac",
+  "root": 55,
+  "cents": -1,
+  "source": "Guitar - Ninnie.wav",
+  "why": "sustain 1.7 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Over",
+  "file": "Electrique/Over.flac",
+  "root": 60,
+  "cents": -4,
+  "source": "Guitar - Over.wav",
+  "why": "sustain -5.2 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Pulse",
+  "file": "Electrique/Pulse.flac",
+  "root": 60,
+  "cents": -13,
+  "source": "Guitar - Pulse.wav",
+  "why": "trémolo (effet d’ampli)"
+ },
+ {
+  "type": 1,
+  "name": "Purple",
+  "file": "Electrique/Purple.flac",
+  "root": 48,
+  "cents": -30,
+  "source": "Guitar - Purple.wav",
+  "why": "swell 89 ms"
+ },
+ {
+  "type": 1,
+  "name": "Reverse",
+  "file": "Electrique/Reverse.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "Guitar - Reverse.wav",
+  "why": "sustain 0.8 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "RGuitar A",
+  "file": "Electrique/RGuitar_A.flac",
+  "root": 48,
+  "cents": -15,
+  "source": "RGuitar - A.wav",
+  "why": "sustain long"
+ },
+ {
+  "type": 1,
+  "name": "RGuitar B",
+  "file": "Electrique/RGuitar_B.flac",
+  "root": 60,
+  "cents": 21,
+  "source": "RGuitar - B.wav",
+  "why": "sustain long"
+ },
+ {
+  "type": 1,
+  "name": "RGuitar C",
+  "file": "Electrique/RGuitar_C.flac",
+  "root": 60,
+  "cents": 3,
+  "source": "RGuitar - C.wav",
+  "why": "sustain long"
+ },
+ {
+  "type": 1,
+  "name": "RGuitar D",
+  "file": "Electrique/RGuitar_D.flac",
+  "root": 72,
+  "cents": 7,
+  "source": "RGuitar - D.wav",
+  "why": "sustain long"
+ },
+ {
+  "type": 1,
+  "name": "Run",
+  "file": "Electrique/Run.flac",
+  "root": 60,
+  "cents": 3,
+  "source": "guitar - run - elec.wav",
+  "why": "nom"
+ },
+ {
+  "type": 1,
+  "name": "Saver",
+  "file": "Electrique/Saver.flac",
+  "root": 48,
+  "cents": -3,
+  "source": "Guitar - Saver.wav",
+  "why": "swell 686 ms"
+ },
+ {
+  "type": 1,
+  "name": "Shaky",
+  "file": "Electrique/Shaky.flac",
+  "root": 60,
+  "cents": 13,
+  "source": "Guitar - Shaky.wav",
+  "why": "swell 85 ms"
+ },
+ {
+  "type": 1,
+  "name": "Singer",
+  "file": "Electrique/Singer.flac",
+  "root": 48,
+  "cents": 6,
+  "source": "Guitar - Singer.wav",
+  "why": "sustain -4.6 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Softy",
+  "file": "Electrique/Softy.flac",
+  "root": 60,
+  "cents": 1,
+  "source": "Guitar - Softy.wav",
+  "why": "swell 132 ms"
+ },
+ {
+  "type": 1,
+  "name": "Soul",
+  "file": "Electrique/Soul.flac",
+  "root": 60,
+  "cents": 15,
+  "source": "Guitar - Soul.wav",
+  "why": "swell 236 ms"
+ },
+ {
+  "type": 1,
+  "name": "Sout",
+  "file": "Electrique/Sout.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "Guitar - Sout.wav",
+  "why": "sustain -8.4 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Space",
+  "file": "Electrique/Space.flac",
+  "root": 61,
+  "cents": 2,
+  "source": "Guitar - Space.wav",
+  "why": "swell 283 ms"
+ },
+ {
+  "type": 1,
+  "name": "Steel",
+  "file": "Electrique/Steel.flac",
+  "root": 60,
+  "cents": -8,
+  "source": "Guitar - Steel.wav",
+  "why": "swell 552 ms"
+ },
+ {
+  "type": 1,
+  "name": "Stirge",
+  "file": "Electrique/Stirge.flac",
+  "root": 48,
+  "cents": -12,
+  "source": "Guitar - Stirge.wav",
+  "why": "sustain -3.5 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Stressed",
+  "file": "Electrique/Stressed.flac",
+  "root": 60,
+  "cents": 2,
+  "source": "guitar - stressed.wav",
+  "why": "pack électrique (run, fender, dirt…)"
+ },
+ {
+  "type": 1,
+  "name": "Tronic",
+  "file": "Electrique/Tronic.flac",
+  "root": 60,
+  "cents": -1,
+  "source": "Guitar - Tronic.wav",
+  "why": "swell 161 ms"
+ },
+ {
+  "type": 1,
+  "name": "Viking",
+  "file": "Electrique/Viking.flac",
+  "root": 60,
+  "cents": 0,
+  "source": "Guitar - Viking.wav",
+  "why": "sustain -2.5 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Wammy",
+  "file": "Electrique/Wammy.flac",
+  "root": 60,
+  "cents": -3,
+  "source": "Guitar - Wammy.wav",
+  "why": "swell 186 ms"
+ },
+ {
+  "type": 1,
+  "name": "Warm",
+  "file": "Electrique/Warm.flac",
+  "root": 60,
+  "cents": -3,
+  "source": "Guitar - Warm.wav",
+  "why": "swell 75 ms"
+ },
+ {
+  "type": 1,
+  "name": "Whip",
+  "file": "Electrique/Whip.flac",
+  "root": 48,
+  "cents": -4,
+  "source": "Guitar - Whip.wav",
+  "why": "sustain -0.7 dB/s"
+ },
+ {
+  "type": 1,
+  "name": "Wonky",
+  "file": "Electrique/Wonky.flac",
+  "root": 60,
+  "cents": -14,
+  "source": "Guitar - Wonky.wav",
+  "why": "swell 65 ms"
+ }
+]

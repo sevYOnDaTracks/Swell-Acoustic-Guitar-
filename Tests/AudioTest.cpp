@@ -46,6 +46,11 @@ int main(){try{juce::ScopedJuceInitialiser_GUI gui;
  for(auto [type,note,hz]:std::initializer_list<std::tuple<int,int,float>>{{0,40,82.41f},{0,64,329.6f},{1,48,130.8f},{1,57,220.f}}){GuitarProcessor p;set(p,"guitarType",(float)type);set(p,"humanize",0);set(p,"dmix",0);set(p,"rmix",0);set(p,"drive",0);
   auto out=run(p,.6,{{0,note,true}});require(p.usingSamples(),"built-in sample not loaded");// Pitch class only: Run's octave harmonic outweighs its fundamental, which fools autocorrelation by an octave.
   float semis=12*std::log2(pitchHz(out,.3,50,500)/hz);require(std::abs(semis-12*std::round(semis/12))<.35f,"built-in sample at wrong pitch");}
+ // Every built-in model decodes (embedded FLAC) and sounds at its root note.
+ {GuitarProcessor p;set(p,"humanize",0);set(p,"dmix",0);set(p,"rmix",0);
+  for(int i=0;i<modelCount;++i){auto& m=models[(size_t)i];set(p,"guitarType",(float)m.type);p.selectModel(m.type,i-modelFirst(m.type));require(p.waitForModels(5000),"model did not load");
+   auto out=run(p,.5,{{0,m.root,true}});require(p.usingSamples(),"model fell back to the synth");float level=rms(out,0,.5);
+   if(!(level>.002f&&level<.8f)){std::cerr<<m.name<<" level "<<level<<'\n';require(false,"model level out of range");}}}
  // Presets set the guitar type.
  {GuitarProcessor p;p.setCurrentProgram(firstPreset(1));require(p.guitarType()==1,"electric preset does not select the electric guitar");}
  // Every preset: sound, no NaN, reasonable level.
@@ -69,4 +74,4 @@ int main(){try{juce::ScopedJuceInitialiser_GUI gui;
  {GuitarProcessor p;set(p,"rmix",0);set(p,"dmix",0);auto out=run(p,1.5,{{0,50,true},{.3,50,false}});require(rms(out,1.,1.5)<rms(out,.05,.3)*.02f,"note off does not release");}
  {GuitarProcessor p;p.setCurrentProgram(4);set(p,"vol",42);juce::MemoryBlock state;p.getStateInformation(state);GuitarProcessor restored;restored.setStateInformation(state.getData(),(int)state.getSize());
   require(restored.getCurrentProgram()==4&&restored.value("slide")>.5f&&std::abs(restored.value("vol")-42)<.2f,"state not restored");}
- std::cout<<"PASS: name parsing, folder load + octave fix + pitch, built-in samples x2, "<<presetCount<<" presets, silence, pitch, strum, slide, legato, palm mute, release, state\n";return 0;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}
+ std::cout<<"PASS: name parsing, folder load + octave fix + pitch, built-in samples x2, "<<modelCount<<" models, "<<presetCount<<" presets, silence, pitch, strum, slide, legato, palm mute, release, state\n";return 0;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

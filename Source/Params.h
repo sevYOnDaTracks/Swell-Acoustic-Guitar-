@@ -1,6 +1,8 @@
 #pragma once
 #include <array>
 #include <cmath>
+#include <juce_core/juce_core.h>
+#include "Models.h"
 // Every continuous control is 0..100 like the prototype; the engine maps it to real units.
 struct KnobInfo {const char* id;const char* label;float def;};
 inline constexpr int moduleCount=6;
@@ -25,8 +27,12 @@ inline constexpr std::array<const char*,4> chordSuffix{"","m","7","sus4"};
 
 inline constexpr int guitarTypeCount=2;
 inline constexpr std::array<const char*,guitarTypeCount> guitarTypes{"Acoustique","Électrique"};
-// Built-in sample of each type, shown next to the type name.
-inline constexpr std::array<const char*,guitarTypeCount> guitarModels{"RC20","Run"};
+// Built-in samples (Models.h is sorted by type, then name): one menu per guitar type.
+inline constexpr std::array<const char*,guitarTypeCount> modelParams{"acousticModel","electricModel"};
+inline int modelFirst(int type){for(int i=0;i<modelCount;++i)if(models[(size_t)i].type==type)return i;return 0;}
+inline int modelsOfType(int type){int n=0;for(auto& m:models)n+=m.type==type?1:0;return n;}
+// Menu position of the sound each guitar opens with.
+inline int defaultModel(int type){auto* want=type==1?"Run":"RC20";for(int i=0;i<modelsOfType(type);++i)if(juce::String(models[(size_t)(modelFirst(type)+i)].name)==want)return i;return 0;}
 
 struct Preset {const char* name;int type;std::array<float,fxKnobCount> fx;std::array<bool,moduleCount> on;};
 inline constexpr int presetCount=11;

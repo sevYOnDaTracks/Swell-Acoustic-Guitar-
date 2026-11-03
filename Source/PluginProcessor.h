@@ -29,6 +29,12 @@ public:
  void loadSamples(const juce::File& folder){loadSamples(guitarType(),folder);}
  void loadSamples(int type,const juce::File& folder);
  void useLibrary(int type,std::shared_ptr<const SampleLibrary>);
+ // Built-in model (index into 'models') picked for a type, and picking one from the editor:
+ // it replaces any sample folder loaded for that type.
+ int selectedModel(int type)const;
+ void selectModel(int type,int menuIndex);
+ // Models load on a background thread; true once every type plays its selected model (tests).
+ bool waitForModels(int timeoutMs);
  juce::File sampleFolder()const;
  static juce::File defaultSampleFolder(int type);
  juce::String libraryStatus()const{const juce::ScopedLock l(statusLock);return status[(size_t)guitarType()];}
@@ -40,6 +46,13 @@ private:
  FxChain fx;std::atomic<int> program{0};
  juce::CriticalSection statusLock;std::array<juce::String,guitarTypeCount> status,folderPath;
  std::array<std::shared_ptr<const SampleLibrary>,guitarTypeCount> builtIn,user;
+ // Loader thread state: which model each builtIn holds, recently decoded models (loader thread only).
+ void updateModels();std::shared_ptr<const SampleLibrary> loadModel(int index);
+ std::array<std::atomic<int>,guitarTypeCount> builtInModel{};std::vector<std::pair<int,std::shared_ptr<const SampleLibrary>>> modelCache;
+ std::shared_ptr<const SampleLibrary> synth;
+ struct ModelLoader:juce::Thread {explicit ModelLoader(GuitarProcessor& p):juce::Thread("Swell Guitar models"),proc(p){}
+  void run()override{while(!threadShouldExit()){proc.updateModels();wait(20);}}GuitarProcessor& proc;};
+ ModelLoader modelLoader{*this};
  juce::ThreadPool loader{1};
  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GuitarProcessor)
 };
