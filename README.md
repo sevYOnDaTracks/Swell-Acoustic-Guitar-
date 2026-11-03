@@ -2,8 +2,9 @@
 
 Guitare acoustique VST3 / AU / Standalone de la suite **Swell** (Swell-audio, by @sevyondatracks). JUCE 8 + CMake.
 
-> **Travail en cours (v0.1, pas encore utilisable).** Le code compile, mais le plugin plante au chargement
-> (l'outil VST3 de JUCE et les tests crashent à l'instanciation). C'est la prochaine chose à corriger.
+> **v0.1** : jouable avec la guitare synthétisée provisoire, en attendant les vrais samples.
+
+![Interface](docs/ui-strum.png)
 
 ## Ce qu'il y a
 - **Moteur sampler** (`Source/GuitarEngine.*`, `Source/SampleLibrary.*`) : lit un dossier de WAV/AIFF/FLAC nommés par note

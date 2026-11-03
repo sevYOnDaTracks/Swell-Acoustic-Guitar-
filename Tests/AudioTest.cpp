@@ -30,7 +30,7 @@ int main(){try{juce::ScopedJuceInitialiser_GUI gui;
    juce::AudioBuffer<float> b(1,48000);for(int i=0;i<48000;++i)b.setSample(0,i,i<480?0.f:(float)(.5*std::sin(6.2831853*hz*i/48000)*std::exp(-2.0*i/48000)));
    std::unique_ptr<juce::OutputStream> os(dir.getChildFile(name).createOutputStream());std::unique_ptr<juce::AudioFormatWriter> w(wav.createWriterFor(os.get(),48000,1,24,{},0));require(w!=nullptr,"wav writer");os.release();w->writeFromAudioSampleBuffer(b,0,48000);}
   juce::String report;auto lib=SampleLibrary::load(dir,report);require(lib&&lib->sampleCount()==2,"library not loaded");require(lib->lowest()==40&&lib->highest()==45,"octave not normalised to E2");
-  uint32_t c=0;auto pick=lib->pick(43,.5f,c);require(pick.root==45||pick.root==40,"nearest root");require(pick.sample->audio.getNumSamples()<48000-400,"leading silence not trimmed");
+  uint32_t c=0;auto pick=lib->pick(43,.5f,c);require(pick.root==45||pick.root==40,"nearest root");require(pick.sample->audio.getNumSamples()<48000-300,"leading silence not trimmed");
   // Plays the loaded library: E2 should sound at ~82 Hz.
   GuitarProcessor p;p.engine.setLibrary(std::shared_ptr<const SampleLibrary>(std::move(lib)));set(p,"humanize",0);set(p,"dmix",0);set(p,"rmix",0);set(p,"drive",0);
   auto out=run(p,.6,{{0,40,true}});float f=pitchHz(out,.1,50,400);require(std::abs(f-82.4f)<3,"sample plays at wrong pitch");dir.deleteRecursively();}

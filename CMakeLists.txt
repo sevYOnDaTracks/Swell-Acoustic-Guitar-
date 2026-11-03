@@ -16,6 +16,7 @@ juce_add_plugin(SwellAcousticGuitar COMPANY_NAME "Swell-audio" BUNDLE_ID "fr.swe
 juce_add_binary_data(GuitarAssets SOURCES assets/guitar-photo.jpg)
 target_sources(SwellAcousticGuitar PRIVATE Source/SampleLibrary.cpp Source/GuitarEngine.cpp Source/PluginProcessor.cpp Source/PluginEditor.cpp)
 target_compile_definitions(SwellAcousticGuitar PUBLIC JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_VST3_CAN_REPLACE_VST2=0)
+target_compile_options(SwellAcousticGuitar PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 target_link_libraries(SwellAcousticGuitar PRIVATE GuitarAssets juce::juce_audio_utils juce::juce_dsp PUBLIC juce::juce_recommended_config_flags)
 enable_testing()
 juce_add_console_app(GuitarTest PRODUCT_NAME "Guitar Audio Tests")

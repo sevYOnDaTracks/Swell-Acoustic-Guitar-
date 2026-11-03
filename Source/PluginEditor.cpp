@@ -14,7 +14,7 @@ constexpr std::array<const char*,6> stringNames{"e","B","G","D","A","E"};
 constexpr std::array<std::array<float,4>,6> photoStrings{{{478,600,868,320},{545,600,911,320},{612,600,955,320},{682,600,1000,320},{752,600,1046,320},{822,600,1087,320}}};
 constexpr float photoScale=1180.f/1280,photoTop=-150;
 juce::Point<float> photoToScreen(float x,float y){return {x*photoScale,y*photoScale+photoTop};}
-const char* articulationName(Articulation a){switch(a){case Articulation::pluck:return "PINCE";case Articulation::slide:return "SLIDE";case Articulation::hammer:return "HAMMER-ON";case Articulation::pulloff:return "PULL-OFF";case Articulation::strum:return "STRUM";case Articulation::palm:return "PALM MUTE";default:return "PRET";}}
+const char* articulationName(Articulation a){switch(a){case Articulation::pluck:return "PINCÉ";case Articulation::slide:return "SLIDE";case Articulation::hammer:return "HAMMER-ON";case Articulation::pulloff:return "PULL-OFF";case Articulation::strum:return "STRUM";case Articulation::palm:return "PALM MUTE";default:return "PRÊT";}}
 }
 
 std::vector<StringPos> assignStrings(std::vector<int> notes){
@@ -86,18 +86,18 @@ GuitarEditor::GuitarEditor(GuitarProcessor& p):AudioProcessorEditor(p),proc(p){
  // Film grain, generated once.
  grain=juce::Image(juce::Image::ARGB,590,225,true);{std::mt19937 r(3);std::uniform_int_distribution<int> d(0,255);for(int y=0;y<grain.getHeight();++y)for(int x=0;x<grain.getWidth();++x){int v=d(r);grain.setPixelAt(x,y,juce::Colour((juce::uint8)v,(juce::uint8)v,(juce::uint8)v,(juce::uint8)18));}}
  guitar.addItem("Steel Dreadnought",1);guitar.addItem(utf8("Nylon — bientôt"),2);guitar.setItemEnabled(2,false);guitar.setSelectedId(1,juce::dontSendNotification);
- for(int i=0;i<presetCount;++i)preset.addItem(presets[(size_t)i].name,i+1);preset.getProperties().set("accent",true);
+ for(int i=0;i<presetCount;++i)preset.addItem(utf8(presets[(size_t)i].name),i+1);preset.getProperties().set("accent",true);
  preset.onChange=[this]{if(preset.getSelectedId()>0)proc.setCurrentProgram(preset.getSelectedId()-1);};
  loadButton.onClick=[this]{chooseFolder();};
  auto pct=[](float v){return juce::String((int)std::round(v))+" %";};
  std::array<std::function<juce::String(float)>,moduleCount> moduleFormats{[](float v){return juce::String((int)std::round(slideSeconds(v)*1000))+" ms";},pct,pct,[](float v){return juce::String((int)std::round(strumGapSeconds(v)*1000))+" ms";},pct,pct};
  for(int i=0;i<moduleCount;++i){auto& m=modules[(size_t)i];switchAttach.push_back(std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(proc.state,m.id,switches[(size_t)i]));
   switches[(size_t)i].onClick=[this]{repaint();};addAndMakeVisible(switches[(size_t)i]);
-  moduleKnobs.push_back(std::make_unique<Knob>(proc,m.knob.id,m.knob.label,moduleFormats[(size_t)i],true));addAndMakeVisible(*moduleKnobs.back());}
+  moduleKnobs.push_back(std::make_unique<Knob>(proc,m.knob.id,utf8(m.knob.label),moduleFormats[(size_t)i],true));addAndMakeVisible(*moduleKnobs.back());}
  auto db=[](float v){float d=eqDb(v);return (d>=0?"+":"")+juce::String(d,1)+" dB";};
  std::array<std::function<juce::String(float)>,fxKnobCount> fxFormats{pct,pct,pct,db,db,db,[](float v){return juce::String((int)std::round(delaySeconds(v)*1000))+" ms";},pct,
   [](float v){return juce::String(reverbSeconds(v),1)+" s";},pct,[](float v){return v<=0?juce::String("-inf"):juce::String(juce::Decibels::gainToDecibels(outputGain(v)/.9f),1)+" dB";}};
- for(int i=0;i<fxKnobCount;++i){fxKnobsUi.push_back(std::make_unique<Knob>(proc,fxKnobs[(size_t)i].id,fxKnobs[(size_t)i].label,fxFormats[(size_t)i]));addAndMakeVisible(*fxKnobsUi.back());}
+ for(int i=0;i<fxKnobCount;++i){fxKnobsUi.push_back(std::make_unique<Knob>(proc,fxKnobs[(size_t)i].id,utf8(fxKnobs[(size_t)i].label),fxFormats[(size_t)i]));addAndMakeVisible(*fxKnobsUi.back());}
  for(int i=0;i<4;++i){chordButtons[(size_t)i].setButtonText(chordNames[(size_t)i]);chordButtons[(size_t)i].onClick=[this,i]{proc.setValue("chord",(float)i);};addAndMakeVisible(chordButtons[(size_t)i]);}
  for(juce::Component* c:{(juce::Component*)&guitar,(juce::Component*)&preset,(juce::Component*)&loadButton,(juce::Component*)&keys})addAndMakeVisible(c);
  setSize(1180,940);timerCallback();startTimerHz(60);}
@@ -116,12 +116,12 @@ void GuitarEditor::timerCallback(){
  for(size_t i=0;i<6;++i)glow[i]=lit[i]?1.f:glow[i]*.93f;
  phase+=1;
  int note=proc.engine.lastNote.load();
- if(note>=0){auto a=proc.engine.lastArticulation.load();articText=articulationName(a);int chordRoot=proc.engine.lastChord.load();
+ if(note>=0){auto a=proc.engine.lastArticulation.load();articText=utf8(articulationName(a));int chordRoot=proc.engine.lastChord.load();
   if(a==Articulation::strum&&chordRoot>=0){noteText=juce::MidiMessage::getMidiNoteName(chordRoot,true,false,4)+chordSuffix[(size_t)chord];subText="Strum  /  5 cordes";}
   else{noteText=noteName(note);int from=proc.engine.lastFrom.load();
    if(from>=0)subText=juce::String(a==Articulation::slide?"Slide":a==Articulation::hammer?"Hammer-on":"Pull-off")+" depuis "+noteName(from);
    else if(note<40)subText="Sous la tessiture de la guitare";
-   else{auto pos=assignStrings({note});subText=pos.empty()?juce::String("Au-dessus de la case 15"):"Corde "+juce::String(stringNames[(size_t)pos[0].string])+"  /  "+(pos[0].fret==0?juce::String("a vide"):"case "+juce::String(pos[0].fret));}}}
+   else{auto pos=assignStrings({note});subText=pos.empty()?juce::String("Au-dessus de la case 15"):"Corde "+juce::String(stringNames[(size_t)pos[0].string])+"  /  "+(pos[0].fret==0?utf8("à vide"):"case "+juce::String(pos[0].fret));}}}
  repaint(0,0,getWidth(),450);keys.repaint();}
 
 void GuitarEditor::resized(){
@@ -135,6 +135,7 @@ void GuitarEditor::resized(){
  keys.setBounds(32,796,1116,104);}
 
 void GuitarEditor::paintHero(juce::Graphics& g){
+ juce::Graphics::ScopedSaveState clip(g);g.reduceClipRegion(0,0,1180,450);
  g.drawImage(photo,0,(int)photoTop,1180,(int)(853*photoScale),0,0,photo.getWidth(),photo.getHeight());
  // Lit strings: orange glow, slight vibration while sounding.
  for(size_t i=0;i<6;++i){float a=glow[i];if(a<.02f)continue;auto& s=photoStrings[i];float dx=(s[2]-s[0])/(s[3]-s[1]);
@@ -142,10 +143,10 @@ void GuitarEditor::paintHero(juce::Graphics& g){
   juce::Line<float> line(p1.translated(wobble,0),p2.translated(-wobble,0));
   for(float w:{16.f,10.f,6.f}){g.setColour(orange.withAlpha(.12f*a));g.drawLine(line,w);}
   g.setColour(orangeLight.withAlpha(a));g.drawLine(line,1.3f+(float)i*.42f);}
- for(size_t i=0;i<6;++i){auto p=photoToScreen(photoStrings[i][0],672);drawLabel(g,stringNames[i],p.x-15,p.y-10,30,16,15.5f,glow[i]>.3f?orange:ink.withAlpha(.55f),juce::Justification::centred,true);}
  g.drawImage(grain,0,0,1180,450,0,0,grain.getWidth(),grain.getHeight());
  g.setGradientFill(juce::ColourGradient(bg.withAlpha(0.f),0,330,bg,0,450,false));g.fillRect(0,330,1180,120);
  g.setGradientFill(juce::ColourGradient(juce::Colour(0xc7050506),0,0,juce::Colour(0x00050506),520,0,false));g.fillRect(0,0,520,450);
+ for(size_t i=0;i<6;++i){auto p=photoToScreen(photoStrings[i][0],628);drawLabel(g,stringNames[i],p.x-15,p.y-10,30,16,15.5f,glow[i]>.3f?orange:ink.withAlpha(.55f),juce::Justification::centred,true);}
  // Header
  juce::Path wave;wave.startNewSubPath(7,23);wave.cubicTo(10.5f,16,14,16,19,23);wave.cubicTo(24,30,27.5f,30,31,23);wave.startNewSubPath(7,15);wave.cubicTo(10.5f,8,14,8,19,15);wave.cubicTo(24,22,27.5f,22,31,15);
  wave.applyTransform(juce::AffineTransform::scale(30.f/38).translated(32,22));g.setColour(orange);g.strokePath(wave,juce::PathStrokeType(2.1f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
@@ -167,9 +168,9 @@ void GuitarEditor::paint(juce::Graphics& g){
  drawLabel(g,"ACCORD STRUM",1148-4*76-120,764,112,14,10,muted,juce::Justification::centredRight,false,.2f);
  float col=1116.f/moduleCount;
  for(int i=0;i<moduleCount;++i){float x=32+i*col;bool on=switches[(size_t)i].getToggleState();if(i>0){g.setColour(rule);g.fillRect(x,480.f,1.f,112.f);}
-  drawLabel(g,modules[(size_t)i].name,x+16,480,col-60,18,12,on?orange:soft,juce::Justification::centredLeft,true,.2f);
-  g.setColour(muted);g.setFont(juce::FontOptions(11.f));g.drawFittedText(modules[(size_t)i].desc,juce::Rectangle<int>((int)x+16,504,(int)col-28,34),juce::Justification::topLeft,2,1.f);}
+  drawLabel(g,utf8(modules[(size_t)i].name),x+16,480,col-60,18,12,on?orange:soft,juce::Justification::centredLeft,true,.2f);
+  g.setColour(muted);g.setFont(juce::FontOptions(11.f));g.drawFittedText(utf8(modules[(size_t)i].desc),juce::Rectangle<int>((int)x+16,504,(int)col-28,34),juce::Justification::topLeft,2,1.f);}
  std::array<float,6> grow{2,1,3,2,2,1};float total=0;for(float w:grow)total+=w;float x=32;
- for(size_t gi=0;gi<fxGroups.size();++gi){float w=1116*grow[gi]/total;if(gi>0){g.setColour(rule);g.fillRect(x,640.f,1.f,100.f);}drawLabel(g,fxGroups[gi].name,x+14,638,w-20,16,11,soft,juce::Justification::centredLeft,true,.2f);x+=w;}
- drawLabel(g,juce::String(presets[(size_t)proc.getCurrentProgram()].name)+"  /  "+(proc.usingSamples()?"samples":"synthese provisoire, en attendant les samples"),32,912,600,14,10.5f,faint);
+ for(size_t gi=0;gi<fxGroups.size();++gi){float w=1116*grow[gi]/total;if(gi>0){g.setColour(rule);g.fillRect(x,640.f,1.f,100.f);}drawLabel(g,utf8(fxGroups[gi].name),x+14,638,w-20,16,11,soft,juce::Justification::centredLeft,true,.2f);x+=w;}
+ drawLabel(g,utf8(presets[(size_t)proc.getCurrentProgram()].name)+"  /  "+(proc.usingSamples()?"samples":utf8("synthèse provisoire, en attendant les samples")),32,912,600,14,10.5f,faint);
  drawLabel(g,"Swell-audio  /  0.1  /  by @sevyondatracks",700,912,448,14,10.5f,faint,juce::Justification::centredRight);}

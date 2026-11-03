@@ -17,7 +17,7 @@ public:
  void processBlock(juce::AudioBuffer<float>&,juce::MidiBuffer&) override;
  bool hasEditor() const override{return true;}juce::AudioProcessorEditor* createEditor() override;
  int getNumPrograms() override{return presetCount;} int getCurrentProgram() override{return program.load();}
- void setCurrentProgram(int i) override;const juce::String getProgramName(int i) override{return presets[(size_t)juce::jlimit(0,presetCount-1,i)].name;}
+ void setCurrentProgram(int i) override;const juce::String getProgramName(int i) override{return juce::String(juce::CharPointer_UTF8(presets[(size_t)juce::jlimit(0,presetCount-1,i)].name));}
  void changeProgramName(int,const juce::String&) override{}
  void getStateInformation(juce::MemoryBlock&) override;void setStateInformation(const void*,int) override;
  float value(const char* id)const{return state.getRawParameterValue(id)->load();}

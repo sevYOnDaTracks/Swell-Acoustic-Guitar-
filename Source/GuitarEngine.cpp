@@ -64,7 +64,7 @@ void GuitarEngine::noteOn(int note,float velocity,int offset,const PlaySettings&
 void GuitarEngine::noteOff(int note){
  keys[(size_t)note]=false;
  if(sustainPedal){sustained[(size_t)note]=true;return;}
- for(auto& v:voices)if(v.active()&&v.key==note&&!v.releasing)release(v,.35f);}
+ for(auto& v:voices)if(v.active()&&v.key==note&&!v.releasing)release(v,.12f);}
 
 void GuitarEngine::renderVoice(Voice& v,juce::AudioBuffer<float>& out,int start,int count,const PlaySettings& s){
  auto& a=v.sample->audio;int length=a.getNumSamples(),channels=a.getNumChannels(),outChannels=out.getNumChannels();

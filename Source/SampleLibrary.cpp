@@ -28,7 +28,7 @@ void SampleLibrary::add(std::shared_ptr<Sample> s,int layer){
  auto it=std::lower_bound(roots.begin(),roots.end(),s->root,[](const Root& r,int n){return r.note<n;});
  if(it==roots.end()||it->note!=s->root){it=roots.insert(it,Root{});it->note=s->root;}
  auto lit=std::lower_bound(it->layerIds.begin(),it->layerIds.end(),layer);auto index=(size_t)(lit-it->layerIds.begin());
- if(lit==it->layerIds.end()||*lit!=layer){it->layerIds.insert(lit,layer);it->layers.insert(it->layers.begin()+(long)index,{});}
+ if(lit==it->layerIds.end()||*lit!=layer){it->layerIds.insert(lit,layer);it->layers.insert(it->layers.begin()+(long)index,std::vector<std::shared_ptr<Sample>>{});}
  it->layers[index].push_back(std::move(s));++count;}
 
 SampleLibrary::Pick SampleLibrary::pick(int note,float velocity,uint32_t& counter)const{
@@ -66,7 +66,7 @@ std::unique_ptr<SampleLibrary> SampleLibrary::load(const juce::File& folder,juce
  return lib;}
 
 std::unique_ptr<SampleLibrary> SampleLibrary::synth(double rate){
- auto lib=std::make_unique<SampleLibrary>();lib->synthetic=true;lib->name="Synthese provisoire";std::mt19937 random(7);std::uniform_real_distribution<float> noise(-1,1);
+ auto lib=std::make_unique<SampleLibrary>();lib->synthetic=true;lib->name=juce::String(juce::CharPointer_UTF8("Synthèse provisoire"));std::mt19937 random(7);std::uniform_real_distribution<float> noise(-1,1);
  for(int note=36;note<=88;++note){
   double f=440*std::pow(2.,(note-69)/12.),period=rate/f;int n=(int)period;float frac=(float)(period-n);
   int length=(int)(rate*3.0);std::vector<float> line((size_t)(length+n+2));
