@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Swell Acoustic Guitar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050506}
+a{color:#ff8a3d}a:hover{color:#ffa86b}
+button,select{font-family:inherit}
+.str{transition:opacity .5s ease, stroke-width .3s ease}
+.vib{animation:vib 55ms linear infinite alternate}
+@keyframes vib{from{transform:translate(-1.4px,-1px)}to{transform:translate(1.4px,1px)}}
+.key{transition:background .25s ease}
+</style>
+</helmet>
+<div style="width: 1180px; height: 940px; box-sizing: border-box; background: #0b0b0c; color: #ededee; font-family: 'Inter Tight', system-ui, sans-serif; position: relative; overflow: hidden; border-radius: 14px">
+
+  <!-- Hero : photo + strings -->
+  <section aria-label="Guitare" style="position: relative; height: 450px; overflow: hidden">
+    <img src="/_blob/7e8660043f3709c7bf32bf977636c998" alt="Gros plan noir et blanc d'une guitare acoustique : chevalet et cordes" style="position: absolute; left: 0; top: -150px; width: 1180px; height: 786px; filter: contrast(1.08) brightness(0.92)">
+    <svg width="1180" height="786" viewBox="0 0 1280 853" style="position: absolute; left: 0; top: -150px" role="img" aria-label="Cordes : celles qui jouent s'allument">
+      <defs>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+      </defs>
+      <sc-for list="{{strings}}" as="s" hint-placeholder-count="6">
+        <g class="{{s.cls}}">
+          <line class="str" x1="{{s.x1}}" y1="{{s.y1}}" x2="{{s.x2}}" y2="{{s.y2}}" stroke="#ff8a3d" stroke-width="9" opacity="{{s.glowOp}}" filter="url(#glow)"></line>
+          <line class="str" x1="{{s.x1}}" y1="{{s.y1}}" x2="{{s.x2}}" y2="{{s.y2}}" stroke="#ffb27a" stroke-width="{{s.w}}" opacity="{{s.op}}"></line>
+        </g>
+        <text x="{{s.x1}}" y="672" fill="{{s.labelColor}}" font-size="17" font-weight="600" font-family="Inter Tight, sans-serif" text-anchor="middle">{{s.name}}</text>
+      </sc-for>
+    </svg>
+    <svg width="1180" height="450" style="position: absolute; left: 0; top: 0; opacity: 0.12; mix-blend-mode: overlay" aria-hidden="true">
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+      <rect width="1180" height="450" filter="url(#grain)"></rect>
+    </svg>
+    <div style="position: absolute; left: 0; top: 330px; width: 1180px; height: 120px; background: linear-gradient(to bottom, rgba(11,11,12,0), #0b0b0c)"></div>
+    <div style="position: absolute; left: 0; top: 0; width: 520px; height: 450px; background: linear-gradient(to right, rgba(5,5,6,0.78), rgba(5,5,6,0))"></div>
+
+    <!-- Top bar -->
+    <header style="position: absolute; left: 32px; right: 32px; top: 24px; display: flex; align-items: center; gap: 20px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <svg width="30" height="30" viewBox="0 0 38 38" aria-hidden="true"><path d="M7 23c3.5-7 7-7 12 0s8.5 7 12 0M7 15c3.5-7 7-7 12 0s8.5 7 12 0" fill="none" stroke="#ff8a3d" stroke-width="2.6" stroke-linecap="round"></path></svg>
+        <span style="font-size: 22px; font-weight: 500; letter-spacing: -0.4px">swell</span>
+      </div>
+      <span style="font-size: 12px; font-weight: 300; letter-spacing: 9px; color: #d9d9dc; margin-left: 10px">ACOUSTIC GUITAR</span>
+      <div style="flex-grow: 1"></div>
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 2px; color: #a3a3a8">GUITARE
+        <select aria-label="Guitare" style="background: rgba(11,11,12,0.55); color: #ededee; border: 0; border-bottom: 1px solid #5a5a60; padding: 6px 4px; font-size: 13px; width: 170px">
+          <option>Steel Dreadnought</option>
+          <option disabled="disabled">Nylon — bientôt</option>
+        </select>
+      </label>
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 2px; color: #a3a3a8">PRESET
+        <select aria-label="Preset" value="{{preset}}" onChange="{{pickPreset}}" style="background: rgba(11,11,12,0.55); color: #ededee; border: 0; border-bottom: 1px solid #ff8a3d; padding: 6px 4px; font-size: 13px; width: 170px">
+          <sc-for list="{{presets}}" as="p" hint-placeholder-count="6"><option value="{{p.id}}">{{p.name}}</option></sc-for>
+        </select>
+      </label>
+    </header>
+
+    <!-- Note readout -->
+    <div style="position: absolute; left: 34px; top: 120px; display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 10px; letter-spacing: 3px; color: #a3a3a8">{{artic}}</span>
+      <span style="font-size: 132px; line-height: 0.95; font-weight: 200; letter-spacing: -5px; color: #f4f4f5">{{label}}</span>
+      <span style="font-size: 14px; font-weight: 400; color: #c9c9cd">{{sublabel}}</span>
+      <div style="display: flex; gap: 22px; margin-top: 14px">
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 9.5px; letter-spacing: 2px; color: #8e8e94">VÉLOCITÉ</span><span style="font-size: 15px; font-family: 'JetBrains Mono', monospace">{{velocity}}</span></div>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 9.5px; letter-spacing: 2px; color: #8e8e94">VOIX</span><span style="font-size: 15px; font-family: 'JetBrains Mono', monospace">{{voices}}</span></div>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 9.5px; letter-spacing: 2px; color: #8e8e94">MOTEUR</span><span style="font-size: 13px; color: #ff8a3d; margin-top: 2px">Synthèse provisoire</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Playing modules -->
+  <section aria-label="Modules de jeu" style="padding: 4px 32px 0">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px"><span style="font-size: 10px; letter-spacing: 4px; color: #8e8e94">JEU</span><div style="flex-grow: 1; height: 1px; background: #232326"></div></div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0">
+      <sc-for list="{{modules}}" as="m" hint-placeholder-count="6">
+        <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px; border-left: {{m.edge}}">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="font-size: 12px; font-weight: 600; letter-spacing: 2.5px; color: {{m.titleColor}}">{{m.name}}</span>
+            <button type="button" onClick="{{m.toggle}}" aria-label="{{m.aria}}" aria-pressed="{{m.on}}" style="width: 44px; height: 44px; margin: -12px -10px -12px 0; background: transparent; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0">
+              <span style="width: 30px; height: 16px; border-radius: 8px; border: 1px solid {{m.ring}}; background: {{m.switchBg}}; position: relative; display: block">
+                <span style="position: absolute; top: 3px; left: {{m.knobX}}px; width: 10px; height: 10px; border-radius: 5px; background: {{m.switchDot}}"></span>
+              </span>
+            </button>
+          </div>
+          <span style="font-size: 11px; line-height: 1.4; color: #8e8e94; height: 31px">{{m.desc}}</span>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div style="position: relative; width: 46px; height: 46px">
+              <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+                <circle cx="23" cy="23" r="19" fill="none" stroke="#26262a" stroke-width="2" stroke-dasharray="89.5 200" transform="rotate(135 23 23)" stroke-linecap="round"></circle>
+                <circle cx="23" cy="23" r="19" fill="none" stroke="{{m.arc}}" stroke-width="2.5" stroke-dasharray="{{m.knob.dash}}" transform="rotate(135 23 23)" stroke-linecap="round"></circle>
+                <circle cx="{{m.knob.px}}" cy="{{m.knob.py}}" r="3.5" fill="{{m.arc}}"></circle>
+              </svg>
+              <input type="range" min="0" max="100" value="{{m.knob.v}}" onChange="{{m.knob.set}}" aria-label="{{m.knob.aria}}" style="position: absolute; inset: 0; width: 46px; height: 46px; opacity: 0; cursor: ew-resize; margin: 0">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 9.5px; letter-spacing: 2px; color: #8e8e94">{{m.knob.label}}</span>
+              <span style="font-size: 13px; font-family: 'JetBrains Mono', monospace; color: {{m.valueColor}}">{{m.knob.text}}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Sound / FX -->
+  <section aria-label="Son" style="padding: 22px 32px 0">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px"><span style="font-size: 10px; letter-spacing: 4px; color: #8e8e94">SON</span><div style="flex-grow: 1; height: 1px; background: #232326"></div></div>
+    <div style="display: flex">
+      <sc-for list="{{fx}}" as="g" hint-placeholder-count="6">
+        <div style="flex-grow: {{g.grow}}; padding: 0 14px; border-left: {{g.edge}}; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 2.5px; color: #d9d9dc">{{g.name}}</span>
+          <div style="display: flex; gap: 10px">
+            <sc-for list="{{g.knobs}}" as="k" hint-placeholder-count="2">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 3px; width: 56px">
+                <div style="position: relative; width: 46px; height: 46px">
+                  <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+                    <circle cx="23" cy="23" r="19" fill="none" stroke="#26262a" stroke-width="2" stroke-dasharray="89.5 200" transform="rotate(135 23 23)" stroke-linecap="round"></circle>
+                    <circle cx="23" cy="23" r="19" fill="none" stroke="#ff8a3d" stroke-width="2.5" stroke-dasharray="{{k.dash}}" transform="rotate(135 23 23)" stroke-linecap="round"></circle>
+                    <circle cx="{{k.px}}" cy="{{k.py}}" r="3.5" fill="#ff8a3d"></circle>
+                  </svg>
+                  <input type="range" min="0" max="100" value="{{k.v}}" onChange="{{k.set}}" aria-label="{{k.aria}}" style="position: absolute; inset: 0; width: 46px; height: 46px; opacity: 0; cursor: ew-resize; margin: 0">
+                </div>
+                <span style="font-size: 9.5px; letter-spacing: 1.6px; color: #8e8e94">{{k.label}}</span>
+                <span style="font-size: 11.5px; font-family: 'JetBrains Mono', monospace">{{k.text}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Keyboard -->
+  <section aria-label="Clavier" style="padding: 22px 32px 0">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px">
+      <span style="font-size: 10px; letter-spacing: 4px; color: #8e8e94">CLAVIER</span>
+      <div style="width: 40px; height: 1px; background: #232326"></div>
+      <span style="font-size: 11px; color: #8e8e94">Haut de touche = doux, bas = fort · glisse pour tester le Slide</span>
+      <div style="flex-grow: 1"></div>
+      <span style="font-size: 10px; letter-spacing: 2px; color: #8e8e94">ACCORD STRUM</span>
+      <sc-for list="{{chords}}" as="c" hint-placeholder-count="4">
+        <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="height: 28px; padding: 0 11px; border-radius: 14px; border: 1px solid {{c.border}}; background: {{c.bg}}; color: {{c.color}}; font-size: 11.5px; font-weight: 500; cursor: pointer">{{c.name}}</button>
+      </sc-for>
+    </div>
+    <div style="position: relative; width: 1116px; height: 104px">
+      <sc-for list="{{whites}}" as="k" hint-placeholder-count="28">
+        <button type="button" class="key" onMouseDown="{{k.down}}" onMouseEnter="{{k.enter}}" aria-label="{{k.name}}" style="position: absolute; left: {{k.x}}px; top: 0; width: 38.8px; height: 104px; box-sizing: border-box; border: 0; border-right: 1px solid #0b0b0c; border-top: 2px solid {{k.top}}; border-radius: 0 0 4px 4px; background: {{k.bg}}; cursor: pointer; padding: 0 0 7px; display: flex; align-items: flex-end; justify-content: center; font-size: 9px; font-weight: 500; color: {{k.color}}">{{k.tag}}</button>
+      </sc-for>
+      <sc-for list="{{blacks}}" as="k" hint-placeholder-count="20">
+        <button type="button" class="key" onMouseDown="{{k.down}}" onMouseEnter="{{k.enter}}" aria-label="{{k.name}}" style="position: absolute; left: {{k.x}}px; top: 0; width: 24px; height: 64px; box-sizing: border-box; border: 1px solid #000; border-radius: 0 0 3px 3px; background: {{k.bg}}; cursor: pointer; padding: 0"></button>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="position: absolute; left: 32px; right: 32px; bottom: 16px; display: flex; justify-content: space-between; font-size: 10.5px; color: #6e6e74; letter-spacing: 0.5px">
+    <span>{{presetName}} · prototype · son de synthèse en attendant les samples</span>
+    <span>Swell-audio · 0.1 · by @sevyondatracks</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":940}}'>
+var NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+// Photo strings, left to right = high e .. low E (OPEN index).
+var OPEN = [64, 59, 55, 50, 45, 40];
+var STRING_NAMES = ['e','B','G','D','A','E'];
+// Each string on the photo (image pixels): bridge pin point and a point higher up the string.
+var PHOTO = [[478, 600, 868, 320], [545, 600, 911, 320], [612, 600, 955, 320], [682, 600, 1000, 320], [752, 600, 1046, 320], [822, 600, 1087, 320]];
+var LOW = 36, HIGH = 83, GUITAR_LOW = 40;
+var CHORDS = { maj: [0, 4, 7, 12, 16], min: [0, 3, 7, 12, 15], sept: [0, 4, 7, 10, 16], sus: [0, 5, 7, 12, 17] };
+var PRESETS = [
+  { id: 'folk', name: 'Folk Warm', vals: { drive: 15, tone: 55, comp: 35, low: 55, mid: 50, high: 55, dtime: 35, dmix: 10, size: 45, rmix: 22, vol: 75 }, mods: { humanize: true } },
+  { id: 'finger', name: 'Fingerstyle Intime', vals: { drive: 5, tone: 45, comp: 25, low: 50, mid: 45, high: 50, dtime: 30, dmix: 0, size: 30, rmix: 14, vol: 75 }, mods: { humanize: true, legato: true } },
+  { id: 'strum', name: 'Strum Pop', vals: { drive: 20, tone: 65, comp: 55, low: 45, mid: 50, high: 65, dtime: 40, dmix: 8, size: 40, rmix: 18, vol: 72 }, mods: { strum: true, humanize: true } },
+  { id: 'lofi', name: 'Lo-fi Bedroom', vals: { drive: 40, tone: 25, comp: 50, low: 60, mid: 55, high: 25, dtime: 55, dmix: 22, size: 55, rmix: 25, vol: 72 }, mods: { humanize: true, vibrato: true } },
+  { id: 'trap', name: 'Trap Mélodique', vals: { drive: 25, tone: 60, comp: 45, low: 40, mid: 50, high: 60, dtime: 62, dmix: 30, size: 75, rmix: 35, vol: 70 }, mods: { slide: true, humanize: true } },
+  { id: 'ambient', name: 'Ambient Wash', vals: { drive: 10, tone: 50, comp: 30, low: 45, mid: 45, high: 55, dtime: 80, dmix: 38, size: 95, rmix: 55, vol: 68 }, mods: { vibrato: true, humanize: true } }
+];
+var MODS = [
+  { id: 'slide', name: 'SLIDE', desc: 'Glisse vers la note suivante jouée liée.', knob: 'slideTime', label: 'TEMPS', fmt: function (v) { return Math.round(30 + v * 4.7) + ' ms'; } },
+  { id: 'legato', name: 'LEGATO', desc: 'Hammer-on, pull-off : sans réattaque.', knob: 'legatoSoft', label: 'DOUCEUR', fmt: function (v) { return Math.round(v) + ' %'; } },
+  { id: 'vibrato', name: 'VIBRATO', desc: 'Vibrato de doigt après l’attaque.', knob: 'vibDepth', label: 'PROFONDEUR', fmt: function (v) { return Math.round(v) + ' %'; } },
+  { id: 'strum', name: 'STRUM', desc: 'Une touche, un accord gratté.', knob: 'strumSpeed', label: 'VITESSE', fmt: function (v) { return Math.round(70 - v * 0.6) + ' ms'; } },
+  { id: 'humanize', name: 'HUMAN', desc: 'Écarts de timing, de force, de justesse.', knob: 'humAmount', label: 'DOSE', fmt: function (v) { return Math.round(v) + ' %'; } },
+  { id: 'palm', name: 'PALM', desc: 'Corde étouffée : court et sourd.', knob: 'palmAmount', label: 'MUTE', fmt: function (v) { return Math.round(v) + ' %'; } }
+];
+var FX = [
+  { name: 'PRÉAMPLI', grow: 2, knobs: [['drive', 'DRIVE', function (v) { return Math.round(v) + ' %'; }], ['tone', 'TONE', function (v) { return Math.round(v) + ' %'; }]] },
+  { name: 'COMP', grow: 1, knobs: [['comp', 'DOSE', function (v) { return Math.round(v) + ' %'; }]] },
+  { name: 'ÉGALISEUR', grow: 3, knobs: [['low', 'GRAVE', function (v) { return dbText(v); }], ['mid', 'MÉDIUM', function (v) { return dbText(v); }], ['high', 'AIGU', function (v) { return dbText(v); }]] },
+  { name: 'DELAY', grow: 2, knobs: [['dtime', 'TEMPS', function (v) { return Math.round(60 + v * 6.4) + ' ms'; }], ['dmix', 'MIX', function (v) { return Math.round(v) + ' %'; }]] },
+  { name: 'REVERB', grow: 2, knobs: [['size', 'TAILLE', function (v) { return (0.6 + v * 0.054).toFixed(1) + ' s'; }], ['rmix', 'MIX', function (v) { return Math.round(v) + ' %'; }]] },
+  { name: 'SORTIE', grow: 1, knobs: [['vol', 'VOLUME', function (v) { return dbOut(v); }]] }
+];
+function dbText(v) { var d = (v - 50) * 0.24; return (d >= 0 ? '+' : '') + d.toFixed(1) + ' dB'; }
+function dbOut(v) { if (v <= 0) return '-inf'; var d = 20 * Math.log10(v / 75); return (d >= 0 ? '+' : '') + d.toFixed(1) + ' dB'; }
+function noteName(m) { return NOTE_NAMES[m % 12] + (Math.floor(m / 12) - 1); }
+function isBlack(m) { var n = m % 12; return n === 1 || n === 3 || n === 6 || n === 8 || n === 10; }
+function knobGeo(v) {
+  var t = v / 100, a = (135 + t * 270) * Math.PI / 180;
+  return { dash: (89.5 * t).toFixed(1) + ' 200', px: (23 + Math.cos(a) * 19).toFixed(1), py: (23 + Math.sin(a) * 19).toFixed(1) };
+}
+function hzOf(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+// Which string plays each note: chords go one note per string from the low E up, single notes take the lowest fret.
+function assignStrings(notes) {
+  var sorted = notes.slice().sort(function (a, b) { return a - b; }), used = 6, out = [];
+  sorted.forEach(function (midi) {
+    var best = -1, bestFret = 99;
+    for (var si = used - 1; si >= 0; si--) {
+      var fr = midi - OPEN[si];
+      if (fr >= 0 && fr <= 15 && (sorted.length > 1 ? best < 0 : fr < bestFret)) { best = si; bestFret = fr; }
+    }
+    if (best < 0) return;
+    used = best; out.push({ string: best, fret: bestFret });
+  });
+  return out;
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      preset: 'folk',
+      vals: Object.assign({ slideTime: 30, legatoSoft: 60, vibDepth: 40, strumSpeed: 55, humAmount: 35, palmAmount: 70 }, PRESETS[0].vals),
+      mods: { slide: false, legato: false, vibrato: false, strum: false, humanize: true, palm: false },
+      chord: 'maj', active: [], label: 'E2', sublabel: 'Joue une note sur le clavier', velocity: '—', voices: 0, artic: 'PRÊT'
+    };
+    this.buffers = {};
+    this.voices = [];
+    this.last = null;
+  }
+
+  componentWillUnmount() { if (this.ctx) this.ctx.close(); }
+
+  ensureAudio() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    var ctx = this.ctx = new C();
+    var n = this.nodes = {};
+    n.bus = ctx.createGain();
+    n.shaper = ctx.createWaveShaper(); n.shaper.oversample = '2x';
+    n.tone = ctx.createBiquadFilter(); n.tone.type = 'lowpass';
+    n.body = ctx.createBiquadFilter(); n.body.type = 'peaking'; n.body.frequency.value = 210; n.body.Q.value = 1.1; n.body.gain.value = 3;
+    n.comp = ctx.createDynamicsCompressor(); n.comp.attack.value = 0.006; n.comp.release.value = 0.18;
+    n.low = ctx.createBiquadFilter(); n.low.type = 'lowshelf'; n.low.frequency.value = 180;
+    n.mid = ctx.createBiquadFilter(); n.mid.type = 'peaking'; n.mid.frequency.value = 1100; n.mid.Q.value = 0.8;
+    n.high = ctx.createBiquadFilter(); n.high.type = 'highshelf'; n.high.frequency.value = 5200;
+    n.master = ctx.createGain();
+    n.delay = ctx.createDelay(1.5); n.fb = ctx.createGain(); n.dsend = ctx.createGain(); n.dfilt = ctx.createBiquadFilter(); n.dfilt.type = 'lowpass'; n.dfilt.frequency.value = 3800;
+    n.verb = ctx.createConvolver(); n.rsend = ctx.createGain();
+    n.bus.connect(n.shaper); n.shaper.connect(n.tone); n.tone.connect(n.body); n.body.connect(n.comp); n.comp.connect(n.low); n.low.connect(n.mid); n.mid.connect(n.high);
+    n.high.connect(n.master);
+    n.high.connect(n.dsend); n.dsend.connect(n.delay); n.delay.connect(n.dfilt); n.dfilt.connect(n.fb); n.fb.connect(n.delay); n.dfilt.connect(n.master);
+    n.high.connect(n.rsend); n.rsend.connect(n.verb); n.verb.connect(n.master);
+    n.master.connect(ctx.destination);
+    this.verbSize = -1;
+    this.applyParams();
+  }
+
+  applyParams() {
+    if (!this.ctx) return;
+    var v = this.state.vals, n = this.nodes, ctx = this.ctx;
+    var k = v.drive / 100 * 30 + 1, curve = new Float32Array(1024);
+    for (var i = 0; i < 1024; i++) { var x = i / 511.5 - 1; curve[i] = Math.tanh(k * x) / Math.tanh(k); }
+    n.shaper.curve = curve;
+    n.bus.gain.value = 0.55 / Math.sqrt(k * 0.35 + 0.65);
+    n.tone.frequency.value = 1500 * Math.pow(12, v.tone / 100);
+    n.comp.threshold.value = -6 - v.comp * 0.34; n.comp.ratio.value = 1.5 + v.comp * 0.08; n.comp.knee.value = 8;
+    n.low.gain.value = (v.low - 50) * 0.24; n.mid.gain.value = (v.mid - 50) * 0.24; n.high.gain.value = (v.high - 50) * 0.24;
+    n.delay.delayTime.value = (60 + v.dtime * 6.4) / 1000; n.fb.gain.value = 0.32; n.dsend.gain.value = v.dmix / 100 * 0.7;
+    n.rsend.gain.value = v.rmix / 100 * 1.1;
+    n.master.gain.value = Math.pow(v.vol / 75, 2) * 0.9;
+    var size = Math.round(v.size / 10);
+    if (size !== this.verbSize) {
+      this.verbSize = size;
+      var len = Math.floor(ctx.sampleRate * (0.6 + v.size * 0.054)), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+      for (var c = 0; c < 2; c++) { var d = ir.getChannelData(c); for (var j = 0; j < len; j++) d[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / len, 3.2); }
+      n.verb.buffer = ir;
+    }
+  }
+
+  pluckBuffer(midi, palm) {
+    var key = midi + (palm ? 'p' : '');
+    if (this.buffers[key]) return this.buffers[key];
+    var ctx = this.ctx, sr = ctx.sampleRate, f = hzOf(midi), dur = palm ? 0.7 : 3.2;
+    var len = Math.floor(sr * dur), buf = ctx.createBuffer(1, len, sr), out = buf.getChannelData(0);
+    var period = sr / f, N = Math.floor(period), frac = period - N;
+    var line = new Float32Array(N + 2), prev = 0;
+    for (var i = 0; i < N + 2; i++) { var r = Math.random() * 2 - 1; prev = prev + 0.55 * (r - prev); line[i] = prev; }
+    var pickPos = Math.max(1, Math.floor(N * 0.13));
+    for (var pi = N + 1; pi >= pickPos; pi--) line[pi] -= 0.6 * line[pi - pickPos];
+    var decay = palm ? 0.985 : 0.9965 - Math.max(0, midi - 60) * 0.00012, damp = palm ? 0.25 : 0.5;
+    var hist = new Float32Array(len + N + 2);
+    for (var j = 0; j < N + 2; j++) hist[j] = line[j];
+    for (var n = N + 2; n < len + N + 2; n++) {
+      var a = hist[n - N], b = hist[n - N - 1], c2 = hist[n - N + 1];
+      var y = (1 - frac) * a + frac * b;
+      hist[n] = decay * ((1 - damp) * y + damp * 0.5 * (y + c2));
+    }
+    var peak = 0;
+    for (var m = 0; m < len; m++) { out[m] = hist[m + N + 2]; peak = Math.max(peak, Math.abs(out[m])); }
+    var fade = Math.floor(sr * 0.05);
+    for (var q = 0; q < len; q++) { out[q] /= (peak || 1); if (q > len - fade) out[q] *= (len - q) / fade; }
+    this.buffers[key] = buf;
+    return buf;
+  }
+
+  startVoice(midi, vel, when, opts) {
+    var ctx = this.ctx, s = this.state, palm = s.mods.palm && s.vals.palmAmount > 5;
+    var src = ctx.createBufferSource(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = palm ? 450 + (100 - s.vals.palmAmount) * 30 : 1800 + vel * 9000;
+    var fromMidi = opts && opts.glideFrom;
+    src.buffer = this.pluckBuffer(fromMidi != null ? fromMidi : midi, palm);
+    src.detune.value = s.mods.humanize ? (Math.random() - 0.5) * s.vals.humAmount * 0.12 : 0;
+    if (fromMidi != null) {
+      var glide = (30 + s.vals.slideTime * 4.7) / 1000;
+      src.playbackRate.setValueAtTime(1, when);
+      src.playbackRate.exponentialRampToValueAtTime(Math.pow(2, (midi - fromMidi) / 12), when + glide);
+    }
+    if (s.mods.vibrato && s.vals.vibDepth > 0) {
+      var lfo = ctx.createOscillator(), lg = ctx.createGain();
+      lfo.frequency.value = 5.2;
+      lg.gain.setValueAtTime(0, when); lg.gain.linearRampToValueAtTime(s.vals.vibDepth * 0.35, when + 0.45);
+      lfo.connect(lg); lg.connect(src.detune); lfo.start(when); lfo.stop(when + 3.3);
+    }
+    var soft = opts && opts.legato ? s.vals.legatoSoft / 100 : 0;
+    var amp = (0.25 + vel * 0.75) * (1 - soft * 0.45);
+    g.gain.setValueAtTime(0, when);
+    g.gain.linearRampToValueAtTime(amp, when + 0.002 + soft * 0.03);
+    if (palm) g.gain.setTargetAtTime(0, when + 0.05, 0.12);
+    src.connect(f); f.connect(g); g.connect(this.nodes.bus);
+    src.start(when);
+    var voice = { src: src, g: g, midi: midi };
+    this.voices.push(voice);
+    var self = this;
+    src.onended = function () { self.voices = self.voices.filter(function (x) { return x !== voice; }); self.setState({ voices: self.voices.length }); };
+    return voice;
+  }
+
+  stopVoice(v, when) {
+    try { v.g.gain.cancelScheduledValues(when); v.g.gain.setTargetAtTime(0, when, 0.015); v.src.stop(when + 0.12); } catch (e) {}
+  }
+
+  play(midi, vel) {
+    this.ensureAudio(); if (!this.ctx) return;
+    var s = this.state, now = this.ctx.currentTime + 0.005, notes = [midi], label = noteName(midi), sub = '', artic = 'PINCÉ';
+    if (s.mods.humanize) vel = Math.max(0.05, Math.min(1, vel + (Math.random() - 0.5) * s.vals.humAmount / 250));
+    var quick = this.last && (performance.now() - this.last.t) < 650;
+    if (s.mods.strum) {
+      var shape = CHORDS[s.chord], root = midi;
+      while (root + shape[shape.length - 1] > HIGH + 4) root -= 12;
+      notes = shape.map(function (x) { return root + x; });
+      var gap = (70 - s.vals.strumSpeed * 0.6) / 1000, up = !!this.nextUp;
+      this.nextUp = !up;
+      var order = up ? notes.slice().reverse() : notes, self = this;
+      this.voices.forEach(function (v) { self.stopVoice(v, now); });
+      order.forEach(function (m, i) {
+        var t = now + i * gap + (s.mods.humanize ? Math.random() * s.vals.humAmount / 8000 : 0);
+        self.startVoice(m, vel * (1 - i * 0.06), t);
+      });
+      label = NOTE_NAMES[root % 12] + ({ maj: '', min: 'm', sept: '7', sus: 'sus4' })[s.chord];
+      sub = 'Strum ' + (up ? 'vers le haut' : 'vers le bas') + ' · ' + notes.length + ' cordes';
+      artic = 'STRUM';
+    } else if (s.mods.slide && quick && this.last.voice && this.last.midi !== midi && Math.abs(this.last.midi - midi) <= 12) {
+      this.stopVoice(this.last.voice, now + 0.01);
+      var v = this.startVoice(midi, Math.max(vel, 0.5) * 0.85, now, { glideFrom: this.last.midi, legato: true });
+      sub = 'Slide depuis ' + noteName(this.last.midi);
+      artic = 'SLIDE';
+      this.last = { midi: midi, voice: v, t: performance.now() };
+    } else if (s.mods.legato && quick && this.last.voice && this.last.midi !== midi) {
+      this.stopVoice(this.last.voice, now + 0.004);
+      var lv = this.startVoice(midi, vel, now, { legato: true });
+      sub = (midi > this.last.midi ? 'Hammer-on' : 'Pull-off') + ' depuis ' + noteName(this.last.midi);
+      artic = midi > this.last.midi ? 'HAMMER-ON' : 'PULL-OFF';
+      this.last = { midi: midi, voice: lv, t: performance.now() };
+    } else {
+      var pv = this.startVoice(midi, vel, now);
+      this.last = { midi: midi, voice: pv, t: performance.now() };
+      artic = s.mods.palm ? 'PALM MUTE' : 'PINCÉ';
+    }
+    if (s.mods.strum) this.last = null;
+    if (!sub) {
+      var pos = assignStrings([midi])[0];
+      sub = midi < GUITAR_LOW ? 'Sous la tessiture de la guitare' : (pos ? 'Corde ' + STRING_NAMES[pos.string] + ' · ' + (pos.fret === 0 ? 'à vide' : 'case ' + pos.fret) : 'Au-dessus de la case 15');
+    }
+    var self2 = this, stamp = Date.now();
+    this.stamp = stamp;
+    this.setState({ active: notes, label: label, sublabel: sub, velocity: Math.round(vel * 127), voices: this.voices.length, artic: artic });
+    setTimeout(function () { if (self2.stamp === stamp) self2.setState({ active: [] }); }, 900);
+  }
+
+  setVal(id, v) {
+    var vals = Object.assign({}, this.state.vals); vals[id] = v;
+    var self = this;
+    this.setState({ vals: vals }, function () { self.applyParams(); });
+  }
+
+  renderVals() {
+    var self = this, s = this.state, active = s.active;
+    var presets = PRESETS.map(function (p) { return { id: p.id, name: p.name }; });
+    var pickPreset = function (e) {
+      var p = PRESETS.filter(function (x) { return x.id === e.target.value; })[0]; if (!p) return;
+      var mods = { slide: false, legato: false, vibrato: false, strum: false, humanize: false, palm: false };
+      Object.keys(p.mods).forEach(function (k) { mods[k] = p.mods[k]; });
+      self.setState({ preset: p.id, vals: Object.assign({}, s.vals, p.vals), mods: mods }, function () { self.applyParams(); });
+    };
+    var modules = MODS.map(function (m, i) {
+      var on = !!s.mods[m.id], v = s.vals[m.knob], geo = knobGeo(v);
+      return {
+        name: m.name, desc: m.desc, on: on ? 'true' : 'false', aria: (on ? 'Désactiver ' : 'Activer ') + m.name.toLowerCase(),
+        edge: i === 0 ? '0' : '1px solid #1f1f22', titleColor: on ? '#ff8a3d' : '#d9d9dc', valueColor: on ? '#ededee' : '#8e8e94',
+        ring: on ? '#ff8a3d' : '#4a4a50', switchBg: on ? '#ff8a3d' : 'transparent', switchDot: on ? '#0b0b0c' : '#6e6e74', knobX: on ? 16 : 3, arc: on ? '#ff8a3d' : '#5a5a60',
+        toggle: function () { var mods = Object.assign({}, s.mods); mods[m.id] = !mods[m.id]; self.setState({ mods: mods }); },
+        knob: { v: v, dash: geo.dash, px: geo.px, py: geo.py, label: m.label, aria: m.name + ' ' + m.label, text: m.fmt(v), set: function (e) { self.setVal(m.knob, Number(e.target.value)); } }
+      };
+    });
+    var fx = FX.map(function (g, gi) {
+      return { name: g.name, grow: g.grow, edge: gi === 0 ? '0' : '1px solid #1f1f22', knobs: g.knobs.map(function (k) {
+        var v = s.vals[k[0]], geo = knobGeo(v);
+        return { v: v, dash: geo.dash, px: geo.px, py: geo.py, label: k[1], aria: g.name + ' ' + k[1], text: k[2](v), set: function (e) { self.setVal(k[0], Number(e.target.value)); } };
+      }) };
+    });
+    var whites = [], blacks = [], wi = 0, KW = 39.85;
+    for (var m = LOW; m <= HIGH; m++) {
+      (function (midi) {
+        var on = active.indexOf(midi) >= 0, out = midi < GUITAR_LOW;
+        var down = function (e) {
+          var r = e.currentTarget.getBoundingClientRect(), vel = Math.min(1, Math.max(0.15, (e.clientY - r.top) / r.height * 1.15));
+          self.play(midi, vel);
+        };
+        var enter = function (e) { if (e.buttons === 1) self.play(midi, 0.7); };
+        if (isBlack(midi)) blacks.push({ x: (wi * KW - 12).toFixed(1), name: noteName(midi), down: down, enter: enter, bg: on ? '#ff8a3d' : '#060607' });
+        else { whites.push({ x: (wi * KW).toFixed(1), name: noteName(midi), tag: midi % 12 === 0 ? noteName(midi) : '', down: down, enter: enter, bg: on ? '#ff8a3d' : (out ? '#141416' : '#1e1e21'), top: on ? '#ffb27a' : (out ? '#1a1a1c' : '#2e2e33'), color: on ? '#0b0b0c' : '#6e6e74' }); wi++; }
+      })(m);
+    }
+    var lit = {};
+    assignStrings(active).forEach(function (p) { lit[p.string] = true; });
+    var strings = PHOTO.map(function (p, i) {
+      var dx = (p[2] - p[0]) / (p[3] - p[1]), on = !!lit[i];
+      return { x1: p[0], y1: p[1] + 4, x2: (p[0] + dx * (40 - p[1])).toFixed(1), y2: 40, w: (1.4 + i * 0.45).toFixed(2), op: on ? 1 : 0, glowOp: on ? 0.75 : 0, cls: on ? 'vib' : '', name: STRING_NAMES[i], labelColor: on ? '#ff8a3d' : 'rgba(237,237,238,0.55)' };
+    });
+    var chords = [['maj', 'Majeur'], ['min', 'Mineur'], ['sept', '7'], ['sus', 'Sus4']].map(function (c) {
+      var on = s.chord === c[0];
+      return { name: c[1], on: on ? 'true' : 'false', bg: on ? '#ff8a3d' : 'transparent', border: on ? '#ff8a3d' : '#3a3a40', color: on ? '#0b0b0c' : '#d9d9dc', pick: function () { self.setState({ chord: c[0] }); } };
+    });
+    var cur = PRESETS.filter(function (p) { return p.id === s.preset; })[0];
+    return {
+      presets: presets, preset: s.preset, pickPreset: pickPreset, presetName: cur ? cur.name : '',
+      modules: modules, fx: fx, whites: whites, blacks: blacks, strings: strings, chords: chords,
+      label: s.label, sublabel: s.sublabel, velocity: s.velocity, voices: s.voices, artic: s.artic
+    };
+  }
+}
+</script>
+</body>
+</html>
