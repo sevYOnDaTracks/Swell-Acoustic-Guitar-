@@ -35,6 +35,6 @@ private:void timerCallback()override;void chooseFolder();void paintHero(juce::Gr
  std::array<Switch,moduleCount> switches;std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>> switchAttach;
  std::vector<std::unique_ptr<Knob>> moduleKnobs,fxKnobsUi;std::array<juce::TextButton,4> chordButtons;
  Keys keys{proc};std::unique_ptr<juce::FileChooser> chooser;
- std::array<float,6> glow{};float phase=0;int shownProgram=-1;
+ std::array<float,6> glow{};float phase=0;int shownProgram=-1,shownType=-1;
  juce::String noteText="E2",subText="Joue une note (clavier MIDI ou clic)",articText{juce::CharPointer_UTF8("PRÊT")};
 };

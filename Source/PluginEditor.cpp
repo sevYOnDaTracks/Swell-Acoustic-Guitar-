@@ -85,8 +85,11 @@ GuitarEditor::GuitarEditor(GuitarProcessor& p):AudioProcessorEditor(p),proc(p){
  setLookAndFeel(&look);photo=juce::ImageCache::getFromMemory(BinaryData::guitarphoto_jpg,BinaryData::guitarphoto_jpgSize);
  // Film grain, generated once.
  grain=juce::Image(juce::Image::ARGB,590,225,true);{std::mt19937 r(3);std::uniform_int_distribution<int> d(0,255);for(int y=0;y<grain.getHeight();++y)for(int x=0;x<grain.getWidth();++x){int v=d(r);grain.setPixelAt(x,y,juce::Colour((juce::uint8)v,(juce::uint8)v,(juce::uint8)v,(juce::uint8)18));}}
- guitar.addItem("Steel Dreadnought",1);guitar.addItem(utf8("Nylon — bientôt"),2);guitar.setItemEnabled(2,false);guitar.setSelectedId(1,juce::dontSendNotification);
- for(int i=0;i<presetCount;++i)preset.addItem(utf8(presets[(size_t)i].name),i+1);preset.getProperties().set("accent",true);
+ for(int t=0;t<guitarTypeCount;++t)guitar.addItem(utf8(guitarTypes[(size_t)t])+"  /  "+utf8(guitarModels[(size_t)t]),t+1);
+ // Changing guitar loads that guitar's first preset, so the amp and EQ suit it straight away.
+ guitar.onChange=[this]{int t=guitar.getSelectedId()-1;if(t>=0&&t!=proc.guitarType())proc.setCurrentProgram(firstPreset(t));};
+ for(int t=0;t<guitarTypeCount;++t){preset.addSectionHeading(utf8(guitarTypes[(size_t)t]));for(int i=0;i<presetCount;++i)if(presets[(size_t)i].type==t)preset.addItem(utf8(presets[(size_t)i].name),i+1);}
+ preset.getProperties().set("accent",true);
  preset.onChange=[this]{if(preset.getSelectedId()>0)proc.setCurrentProgram(preset.getSelectedId()-1);};
  loadButton.onClick=[this]{chooseFolder();};
  auto pct=[](float v){return juce::String((int)std::round(v))+" %";};
@@ -109,6 +112,7 @@ void GuitarEditor::chooseFolder(){
 
 void GuitarEditor::timerCallback(){
  int program=proc.getCurrentProgram();if(program!=shownProgram){shownProgram=program;preset.setSelectedId(program+1,juce::dontSendNotification);}
+ int type=proc.guitarType();if(type!=shownType){shownType=type;guitar.setSelectedId(type+1,juce::dontSendNotification);repaint();}
  int chord=(int)proc.value("chord");for(int i=0;i<4;++i)chordButtons[(size_t)i].setToggleState(i==chord,juce::dontSendNotification);
  for(int i=0;i<moduleCount;++i){bool on=switches[(size_t)i].getToggleState();auto& k=*moduleKnobs[(size_t)i];if(k.active!=on){k.active=on;k.slider.getProperties().set("active",on);k.repaint();}}
  std::vector<int> notes;for(int n=0;n<128;++n)if(proc.engine.isSounding(n))notes.push_back(n);
@@ -150,7 +154,7 @@ void GuitarEditor::paintHero(juce::Graphics& g){
  // Header
  juce::Path wave;wave.startNewSubPath(7,23);wave.cubicTo(10.5f,16,14,16,19,23);wave.cubicTo(24,30,27.5f,30,31,23);wave.startNewSubPath(7,15);wave.cubicTo(10.5f,8,14,8,19,15);wave.cubicTo(24,22,27.5f,22,31,15);
  wave.applyTransform(juce::AffineTransform::scale(30.f/38).translated(32,22));g.setColour(orange);g.strokePath(wave,juce::PathStrokeType(2.1f,juce::PathStrokeType::curved,juce::PathStrokeType::rounded));
- drawLabel(g,"swell",72,22,90,30,22,ink);drawLabel(g,"A C O U S T I C   G U I T A R",150,22,320,30,12,soft);
+ drawLabel(g,"swell",72,22,90,30,22,ink);drawLabel(g,proc.guitarType()==1?"E L E C T R I C   G U I T A R":"A C O U S T I C   G U I T A R",150,22,320,30,12,soft);
  // Readout
  drawLabel(g,articText,34,118,300,14,10,juce::Colour(0xffa3a3a8),juce::Justification::centredLeft,false,.3f);
  g.setColour(juce::Colour(0xfff4f4f5));g.setFont(juce::FontOptions(128.f).withKerningFactor(-.04f));g.drawText(noteText,juce::Rectangle<float>(30,134,560,130),juce::Justification::centredLeft);
@@ -171,6 +175,6 @@ void GuitarEditor::paint(juce::Graphics& g){
   drawLabel(g,utf8(modules[(size_t)i].name),x+16,480,col-60,18,12,on?orange:soft,juce::Justification::centredLeft,true,.2f);
   g.setColour(muted);g.setFont(juce::FontOptions(11.f));g.drawFittedText(utf8(modules[(size_t)i].desc),juce::Rectangle<int>((int)x+16,504,(int)col-28,34),juce::Justification::topLeft,2,1.f);}
  std::array<float,6> grow{2,1,3,2,2,1};float total=0;for(float w:grow)total+=w;float x=32;
- for(size_t gi=0;gi<fxGroups.size();++gi){float w=1116*grow[gi]/total;if(gi>0){g.setColour(rule);g.fillRect(x,640.f,1.f,100.f);}drawLabel(g,utf8(fxGroups[gi].name),x+14,638,w-20,16,11,soft,juce::Justification::centredLeft,true,.2f);x+=w;}
- drawLabel(g,utf8(presets[(size_t)proc.getCurrentProgram()].name)+"  /  "+(proc.usingSamples()?"samples":utf8("synthèse provisoire, en attendant les samples")),32,912,600,14,10.5f,faint);
- drawLabel(g,"Swell-audio  /  0.1  /  by @sevyondatracks",700,912,448,14,10.5f,faint,juce::Justification::centredRight);}
+ for(size_t gi=0;gi<fxGroups.size();++gi){float w=1116*grow[gi]/total;if(gi>0){g.setColour(rule);g.fillRect(x,640.f,1.f,100.f);}drawLabel(g,gi==0&&proc.guitarType()==1?juce::String("AMPLI + BAFFLE"):utf8(fxGroups[gi].name),x+14,638,w-20,16,11,soft,juce::Justification::centredLeft,true,.2f);x+=w;}
+ drawLabel(g,utf8(presets[(size_t)proc.getCurrentProgram()].name)+"  /  "+utf8(guitarTypes[(size_t)proc.guitarType()])+"  /  "+(proc.usingSamples()?"samples":utf8("synthèse provisoire")),32,912,600,14,10.5f,faint);
+ drawLabel(g,"Swell-audio  /  0.2  /  by @sevyondatracks",700,912,448,14,10.5f,faint,juce::Justification::centredRight);}

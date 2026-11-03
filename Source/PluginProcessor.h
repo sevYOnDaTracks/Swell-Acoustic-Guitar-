@@ -9,7 +9,7 @@ public:
  juce::AudioProcessorValueTreeState state;
  GuitarEngine engine;
  juce::MidiKeyboardState keyboard;  // on-screen keyboard
- const juce::String getName() const override{return "Swell Acoustic Guitar";}
+ const juce::String getName() const override{return "Swell Guitar";}
  bool acceptsMidi() const override{return true;} bool producesMidi() const override{return false;}
  double getTailLengthSeconds() const override{return 4;}
  bool isBusesLayoutSupported(const BusesLayout&) const override;
@@ -23,19 +23,23 @@ public:
  float value(const char* id)const{return state.getRawParameterValue(id)->load();}
  void setValue(const char* id,float v);
 
- // Sample folder: loaded on a background thread; the synth plays until it is ready.
- void loadSamples(const juce::File& folder);
+ // 0 = acoustique, 1 = electrique: picks the sound set and the amp of the FX chain.
+ int guitarType()const{return juce::jlimit(0,guitarTypeCount-1,(int)value("guitarType"));}
+ // Each type plays its built-in sample until a folder is loaded for it (on a background thread).
+ void loadSamples(const juce::File& folder){loadSamples(guitarType(),folder);}
+ void loadSamples(int type,const juce::File& folder);
+ void useLibrary(int type,std::shared_ptr<const SampleLibrary>);
  juce::File sampleFolder()const;
- static juce::File defaultSampleFolder();
- juce::String libraryStatus()const{const juce::ScopedLock l(statusLock);return status;}
+ static juce::File defaultSampleFolder(int type);
+ juce::String libraryStatus()const{const juce::ScopedLock l(statusLock);return status[(size_t)guitarType()];}
  bool usingSamples()const{auto lib=engine.library();return lib&&!lib->isSynth();}
  PlaySettings settings()const;
 private:
  static juce::AudioProcessorValueTreeState::ParameterLayout layout();
- void setStatus(const juce::String& s){const juce::ScopedLock l(statusLock);status=s;}
+ void setStatus(int type,const juce::String& s){const juce::ScopedLock l(statusLock);status[(size_t)type]=s;}
  FxChain fx;std::atomic<int> program{0};
- juce::CriticalSection statusLock;juce::String status;juce::String folderPath;
- std::shared_ptr<const SampleLibrary> synthLibrary,loaded;
+ juce::CriticalSection statusLock;std::array<juce::String,guitarTypeCount> status,folderPath;
+ std::array<std::shared_ptr<const SampleLibrary>,guitarTypeCount> builtIn,user;
  juce::ThreadPool loader{1};
  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GuitarProcessor)
 };

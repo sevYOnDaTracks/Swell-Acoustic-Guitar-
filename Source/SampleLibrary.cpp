@@ -15,6 +15,18 @@ int layerToken(juce::String t){t=t.toLowerCase();
  for(auto* s:{"mp","mf","m","medium","moyen","mezzo","med","v2","vel2","l2"})if(t==s)return 1;
  for(auto* s:{"f","ff","forte","fort","hard","v3","vel3","l3"})if(t==s)return 2;
  return -1;}
+// Reads up to 20 s, trims silence before the pick attack (keeping 2 ms so the transient is untouched)
+// and fades the last 20 ms so a sample cut short never clicks.
+std::shared_ptr<Sample> readSample(juce::AudioFormatReader& reader,int root){
+ auto length=(int)std::min<juce::int64>(reader.lengthInSamples,(juce::int64)(reader.sampleRate*20));int channels=(int)std::min(2u,reader.numChannels);
+ juce::AudioBuffer<float> raw(channels,length);reader.read(&raw,0,length,0,true,channels>1);
+ float peak=raw.getMagnitude(0,length);int start=0;
+ while(start<length){bool loud=false;for(int c=0;c<channels;++c)loud|=std::abs(raw.getSample(c,start))>peak*.02f;if(loud)break;++start;}
+ start=std::max(0,start-(int)(reader.sampleRate*.002));if(peak<=0||length-start<64)return nullptr;
+ auto s=std::make_shared<Sample>();s->root=juce::jlimit(0,127,root);s->rate=reader.sampleRate;s->audio.setSize(channels,length-start);
+ for(int c=0;c<channels;++c)s->audio.copyFrom(c,0,raw,c,start,length-start);
+ int fade=std::min(s->audio.getNumSamples()/4,(int)(reader.sampleRate*.02));s->audio.applyGainRamp(s->audio.getNumSamples()-fade,fade,1,0);
+ return s;}
 int takeToken(juce::String t){t=t.toLowerCase();for(auto* p:{"rr","take","t"})if(t.startsWith(p)&&t.length()>(int)strlen(p)&&t.substring((int)strlen(p)).containsOnly("0123456789"))return t.substring((int)strlen(p)).getIntValue();return -1;}
 }
 
@@ -49,14 +61,7 @@ std::unique_ptr<SampleLibrary> SampleLibrary::load(const juce::File& folder,juce
  auto lib=std::make_unique<SampleLibrary>();lib->name=folder.getFileName();int failed=0;
  for(auto& f:found){
   std::unique_ptr<juce::AudioFormatReader> reader(formats.createReaderFor(f.file));if(!reader){++failed;continue;}
-  auto length=(int)std::min<juce::int64>(reader->lengthInSamples,(juce::int64)(reader->sampleRate*20));int channels=(int)std::min(2u,reader->numChannels);
-  juce::AudioBuffer<float> raw(channels,length);reader->read(&raw,0,length,0,true,channels>1);
-  // Trim silence before the pick attack, keeping 2 ms so the transient is untouched.
-  float peak=raw.getMagnitude(0,length);int start=0;
-  while(start<length){bool loud=false;for(int c=0;c<channels;++c)loud|=std::abs(raw.getSample(c,start))>peak*.02f;if(loud)break;++start;}
-  start=std::max(0,start-(int)(reader->sampleRate*.002));if(peak<=0||length-start<64){++failed;continue;}
-  auto s=std::make_shared<Sample>();s->root=juce::jlimit(0,127,f.note+shift);s->rate=reader->sampleRate;s->audio.setSize(channels,length-start);
-  for(int c=0;c<channels;++c)s->audio.copyFrom(c,0,raw,c,start,length-start);
+  auto s=readSample(*reader,f.note+shift);if(!s){++failed;continue;}
   lib->add(std::move(s),f.layer<0?1:f.layer);}
  if(lib->count==0){report="Fichiers trouves mais illisibles dans "+folder.getFullPathName();return nullptr;}
  auto names=[](int n){return juce::MidiMessage::getMidiNoteName(n,true,true,4);};
@@ -64,6 +69,11 @@ std::unique_ptr<SampleLibrary> SampleLibrary::load(const juce::File& folder,juce
  if(shift!=0)report<<" (octaves decalees de "<<(shift>0?"+":"")<<shift/12<<")";
  if(skipped+failed>0)report<<", "<<(skipped+failed)<<" fichier(s) ignore(s)";
  return lib;}
+
+std::unique_ptr<SampleLibrary> SampleLibrary::single(const void* wavData,size_t size,int note,const juce::String& name){
+ juce::WavAudioFormat wav;std::unique_ptr<juce::AudioFormatReader> reader(wav.createReaderFor(new juce::MemoryInputStream(wavData,size,false),true));
+ if(!reader)return nullptr;auto s=readSample(*reader,note);if(!s)return nullptr;
+ auto lib=std::make_unique<SampleLibrary>();lib->name=name;lib->add(std::move(s),1);return lib;}
 
 std::unique_ptr<SampleLibrary> SampleLibrary::synth(double rate){
  auto lib=std::make_unique<SampleLibrary>();lib->synthetic=true;lib->name=juce::String(juce::CharPointer_UTF8("Synthèse provisoire"));std::mt19937 random(7);std::uniform_real_distribution<float> noise(-1,1);
