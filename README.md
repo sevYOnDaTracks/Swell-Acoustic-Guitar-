@@ -4,7 +4,15 @@ Guitare acoustique VST3 / AU / Standalone de la suite **Swell** (Swell-audio, by
 
 > **v0.1** : jouable avec la guitare synthétisée provisoire, en attendant les vrais samples.
 
-![Interface](docs/ui-strum.png)
+## Captures
+
+**Strum** (preset Strum Pop, accord de C : 5 cordes allumées)
+
+![Swell Acoustic Guitar - strum](docs/ui-strum.png)
+
+**Note seule** (preset Trap Mélodique, E3 sur la corde D, case 2)
+
+![Swell Acoustic Guitar - note](docs/ui-note.png)
 
 ## Ce qu'il y a
 - **Moteur sampler** (`Source/GuitarEngine.*`, `Source/SampleLibrary.*`) : lit un dossier de WAV/AIFF/FLAC nommés par note
