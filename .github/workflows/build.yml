@@ -23,6 +23,7 @@ jobs:
         run: |
           mkdir -p package
           cd build/SwellAcousticGuitar_artefacts/Release
+          for b in "AU/Swell Guitar.component" "VST3/Swell Guitar.vst3" "Standalone/Swell Guitar.app"; do codesign --force --deep -s - "$b"; done
           ditto -c -k --keepParent VST3 ../../../package/Swell-Acoustic-Guitar-macOS-VST3.zip
           ditto -c -k --keepParent AU ../../../package/Swell-Acoustic-Guitar-macOS-AU.zip
           ditto -c -k --keepParent Standalone ../../../package/Swell-Acoustic-Guitar-macOS-Standalone.zip
