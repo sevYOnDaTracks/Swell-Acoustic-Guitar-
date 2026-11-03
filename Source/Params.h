@@ -23,15 +23,26 @@ inline constexpr std::array<const char*,4> chordNames{"Majeur","Mineur","7","Sus
 inline constexpr std::array<std::array<int,5>,4> chordShapes{{{0,4,7,12,16},{0,3,7,12,15},{0,4,7,10,16},{0,5,7,12,17}}};
 inline constexpr std::array<const char*,4> chordSuffix{"","m","7","sus4"};
 
-struct Preset {const char* name;std::array<float,fxKnobCount> fx;std::array<bool,moduleCount> on;};
-inline constexpr int presetCount=6;
+inline constexpr int guitarTypeCount=2;
+inline constexpr std::array<const char*,guitarTypeCount> guitarTypes{"Acoustique","Électrique"};
+// Built-in sample of each type, shown next to the type name.
+inline constexpr std::array<const char*,guitarTypeCount> guitarModels{"RC20","Run"};
+
+struct Preset {const char* name;int type;std::array<float,fxKnobCount> fx;std::array<bool,moduleCount> on;};
+inline constexpr int presetCount=11;
 inline constexpr std::array<Preset,presetCount> presets{{
- {"Folk Warm",{15,55,35,55,50,55,35,10,45,22,75},{false,false,false,false,true,false}},
- {"Fingerstyle Intime",{5,45,25,50,45,50,30,0,30,14,75},{false,true,false,false,true,false}},
- {"Strum Pop",{20,65,55,45,50,65,40,8,40,18,72},{false,false,false,true,true,false}},
- {"Lo-fi Bedroom",{40,25,50,60,55,25,55,22,55,25,72},{false,false,true,false,true,false}},
- {"Trap Mélodique",{25,60,45,40,50,60,62,30,75,35,70},{true,false,false,false,true,false}},
- {"Ambient Wash",{10,50,30,45,45,55,80,38,95,55,68},{false,false,true,false,true,false}}}};
+ {"Folk Warm",0,{15,55,35,55,50,55,35,10,45,22,75},{false,false,false,false,true,false}},
+ {"Fingerstyle Intime",0,{5,45,25,50,45,50,30,0,30,14,75},{false,true,false,false,true,false}},
+ {"Strum Pop",0,{20,65,55,45,50,65,40,8,40,18,72},{false,false,false,true,true,false}},
+ {"Lo-fi Bedroom",0,{40,25,50,60,55,25,55,22,55,25,72},{false,false,true,false,true,false}},
+ {"Trap Mélodique",0,{25,60,45,40,50,60,62,30,75,35,70},{true,false,false,false,true,false}},
+ {"Ambient Wash",0,{10,50,30,45,45,55,80,38,95,55,68},{false,false,true,false,true,false}},
+ {"Clean Jazz",1,{10,40,30,55,45,45,35,0,40,18,75},{false,true,false,false,true,false}},
+ {"Crunch Rock",1,{55,60,45,55,60,55,35,0,35,12,72},{false,false,false,true,true,false}},
+ {"Lead Saturé",1,{80,65,55,50,65,55,55,18,50,20,70},{true,false,true,false,true,false}},
+ {"Palm Mute Heavy",1,{85,55,60,65,40,60,30,0,25,8,70},{false,false,false,false,true,true}},
+ {"Ambient Électrique",1,{20,50,30,45,45,55,80,40,95,50,70},{false,false,true,false,true,false}}}};
+inline int firstPreset(int type){for(int i=0;i<presetCount;++i)if(presets[(size_t)i].type==type)return i;return 0;}
 
 inline float eqDb(float v){return (v-50)*.24f;}
 inline float slideSeconds(float v){return (30+v*4.7f)/1000;}

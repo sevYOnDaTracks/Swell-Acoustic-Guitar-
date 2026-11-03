@@ -16,6 +16,8 @@ public:
  // Octaves are shifted so the lowest note lands in C2..B2 (guitar low E = E2), whatever
  // naming convention (C3, C4 or C5 = middle C) the recording software used.
  static std::unique_ptr<SampleLibrary> load(const juce::File& folder,juce::String& report);
+ // One embedded WAV played across the whole keyboard (built-in sound of each guitar type).
+ static std::unique_ptr<SampleLibrary> single(const void* wavData,size_t size,int note,const juce::String& name);
  // Karplus-Strong plucked strings, used until real samples are loaded.
  static std::unique_ptr<SampleLibrary> synth(double rate=44100);
 
