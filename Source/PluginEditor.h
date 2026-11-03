@@ -30,7 +30,7 @@ private:int noteAt(juce::Point<float>,float& velocity)const;juce::Rectangle<floa
 class GuitarEditor:public juce::AudioProcessorEditor,private juce::Timer {
 public:explicit GuitarEditor(GuitarProcessor&);~GuitarEditor()override;void paint(juce::Graphics&)override;void resized()override;
 private:void timerCallback()override;void chooseFolder();void paintHero(juce::Graphics&);
- GuitarProcessor& proc;GuitarLook look;juce::Image photo,grain;
+ GuitarProcessor& proc;GuitarLook look;std::array<juce::Image,guitarTypeCount> photos;juce::Image grain;
  juce::ComboBox guitar,preset;juce::TextButton loadButton{"Samples..."};
  std::array<Switch,moduleCount> switches;std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>> switchAttach;
  std::vector<std::unique_ptr<Knob>> moduleKnobs,fxKnobsUi;std::array<juce::TextButton,4> chordButtons;

@@ -13,8 +13,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarProcessor::layout(){
  return l;}
 
 GuitarProcessor::GuitarProcessor():AudioProcessor(BusesProperties().withOutput("Output",juce::AudioChannelSet::stereo(),true)),state(*this,nullptr,"SwellAcousticGuitar",layout()){
- std::array<std::pair<const char*,int>,guitarTypeCount> wavs{{{BinaryData::Acoustique_Hollow_C4_wav,BinaryData::Acoustique_Hollow_C4_wavSize},{BinaryData::Electrique_Bassy_C3_wav,BinaryData::Electrique_Bassy_C3_wavSize}}};
- std::array<int,guitarTypeCount> roots{60,48};std::shared_ptr<const SampleLibrary> synth;
+ std::array<std::pair<const char*,int>,guitarTypeCount> wavs{{{BinaryData::Acoustique_RC20_C4_wav,BinaryData::Acoustique_RC20_C4_wavSize},{BinaryData::Electrique_Run_C4_wav,BinaryData::Electrique_Run_C4_wavSize}}};
+ std::array<int,guitarTypeCount> roots{60,60};std::shared_ptr<const SampleLibrary> synth;
  for(int t=0;t<guitarTypeCount;++t){auto name=juce::String(juce::CharPointer_UTF8(guitarModels[(size_t)t]))+juce::String(juce::CharPointer_UTF8(" — sample intégré"));
   builtIn[(size_t)t]=SampleLibrary::single(wavs[(size_t)t].first,(size_t)wavs[(size_t)t].second,roots[(size_t)t],name);
   // A broken embedded file should never leave the plugin silent.

@@ -26,7 +26,7 @@ inline constexpr std::array<const char*,4> chordSuffix{"","m","7","sus4"};
 inline constexpr int guitarTypeCount=2;
 inline constexpr std::array<const char*,guitarTypeCount> guitarTypes{"Acoustique","Électrique"};
 // Built-in sample of each type, shown next to the type name.
-inline constexpr std::array<const char*,guitarTypeCount> guitarModels{"Hollow","Bassy"};
+inline constexpr std::array<const char*,guitarTypeCount> guitarModels{"RC20","Run"};
 
 struct Preset {const char* name;int type;std::array<float,fxKnobCount> fx;std::array<bool,moduleCount> on;};
 inline constexpr int presetCount=11;

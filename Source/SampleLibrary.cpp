@@ -73,6 +73,8 @@ std::unique_ptr<SampleLibrary> SampleLibrary::load(const juce::File& folder,juce
 std::unique_ptr<SampleLibrary> SampleLibrary::single(const void* wavData,size_t size,int note,const juce::String& name){
  juce::WavAudioFormat wav;std::unique_ptr<juce::AudioFormatReader> reader(wav.createReaderFor(new juce::MemoryInputStream(wavData,size,false),true));
  if(!reader)return nullptr;auto s=readSample(*reader,note);if(!s)return nullptr;
+ // Built-ins come from different sources: same peak, so the presets drive the amp the same way whatever the file.
+ s->audio.applyGain(.3f/std::max(s->audio.getMagnitude(0,s->audio.getNumSamples()),1e-6f));
  auto lib=std::make_unique<SampleLibrary>();lib->name=name;lib->add(std::move(s),1);return lib;}
 
 std::unique_ptr<SampleLibrary> SampleLibrary::synth(double rate){
