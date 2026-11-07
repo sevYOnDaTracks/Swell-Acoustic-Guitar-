@@ -120,7 +120,7 @@ void GuitarEditor::timerCallback(){
  int program=proc.getCurrentProgram();if(program!=shownProgram){shownProgram=program;preset.setSelectedId(program+1,juce::dontSendNotification);}
  int type=proc.guitarType();if(type!=shownType){shownType=type;guitar.setSelectedId(type+1,juce::dontSendNotification);repaint();
   // Each guitar has its own list of built-in samples.
-  model.clear(juce::dontSendNotification);for(int i=0;i<modelsOfType(type);++i)model.addItem(models[(size_t)(modelFirst(type)+i)].name,i+1);shownModel=-1;}
+  model.clear(juce::dontSendNotification);for(int i=0;i<modelsOfType(type);++i)model.addItem(juce::String(juce::CharPointer_UTF8(models[(size_t)(modelFirst(type)+i)].name)),i+1);shownModel=-1;}
  int m=selectedModelIndex();if(m!=shownModel){shownModel=m;model.setSelectedId(m+1,juce::dontSendNotification);}
  int chord=(int)proc.value("chord");for(int i=0;i<4;++i)chordButtons[(size_t)i].setToggleState(i==chord,juce::dontSendNotification);
  for(int i=0;i<moduleCount;++i){bool on=switches[(size_t)i].getToggleState();auto& k=*moduleKnobs[(size_t)i];if(k.active!=on){k.active=on;k.slider.getProperties().set("active",on);k.repaint();}}

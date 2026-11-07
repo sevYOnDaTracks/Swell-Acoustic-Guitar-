@@ -78,6 +78,19 @@ std::unique_ptr<SampleLibrary> SampleLibrary::single(const void* data,size_t siz
  s->audio.applyGain(.3f/std::max(s->audio.getMagnitude(0,s->audio.getNumSamples()),1e-6f));
  auto lib=std::make_unique<SampleLibrary>();lib->name=name;lib->add(std::move(s),1);return lib;}
 
+std::unique_ptr<SampleLibrary> SampleLibrary::kit(const std::vector<Embedded>& files,const juce::String& name){
+ juce::AudioFormatManager formats;formats.registerBasicFormats();
+ auto lib=std::make_unique<SampleLibrary>();lib->name=name;float peak=0;
+ std::vector<std::shared_ptr<Sample>> all;
+ for(auto& f:files){int n,l,t;if(!parseName(f.fileName,n,l,t))continue;
+  std::unique_ptr<juce::AudioFormatReader> reader(formats.createReaderFor(std::make_unique<juce::MemoryInputStream>(f.data,f.size,false)));if(!reader)continue;
+  auto s=readSample(*reader,n);if(!s)continue;peak=std::max(peak,s->audio.getMagnitude(0,s->audio.getNumSamples()));
+  all.push_back(s);lib->add(std::move(s),l<0?1:l);}
+ if(lib->count==0)return nullptr;
+ // Loudest note of the kit at the level the single-sample models had, so the presets drive the amp alike.
+ for(auto& s:all)s->audio.applyGain(.45f/std::max(peak,1e-6f));
+ return lib;}
+
 std::unique_ptr<SampleLibrary> SampleLibrary::synth(double rate){
  auto lib=std::make_unique<SampleLibrary>();lib->synthetic=true;lib->name=juce::String(juce::CharPointer_UTF8("Synthèse provisoire"));std::mt19937 random(7);std::uniform_real_distribution<float> noise(-1,1);
  for(int note=36;note<=88;++note){

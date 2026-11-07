@@ -20,7 +20,7 @@ public:
  void setCurrentProgram(int i) override;const juce::String getProgramName(int i) override{return juce::String(juce::CharPointer_UTF8(presets[(size_t)juce::jlimit(0,presetCount-1,i)].name));}
  void changeProgramName(int,const juce::String&) override{}
  void getStateInformation(juce::MemoryBlock&) override;void setStateInformation(const void*,int) override;
- float value(const char* id)const{return state.getRawParameterValue(id)->load();}
+ float value(const char* id)const{auto* v=state.getRawParameterValue(id);return v!=nullptr?v->load():0.0f;}
  void setValue(const char* id,float v);
 
  // 0 = acoustique, 1 = electrique: picks the sound set and the amp of the FX chain.

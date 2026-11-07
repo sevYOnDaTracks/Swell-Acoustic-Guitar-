@@ -8,8 +8,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarProcessor::layout(){
   l.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{m.id,1},juce::String(m.name).toLowerCase(),juce::String(m.id)=="humanize"));
   l.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{m.knob.id,1},juce::String(m.name).toLowerCase()+" "+juce::String(m.knob.label).toLowerCase(),percent,m.knob.def));}
  l.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{"guitarType",1},"guitare",juce::StringArray{juce::CharPointer_UTF8(guitarTypes[0]),juce::CharPointer_UTF8(guitarTypes[1])},0));
- for(int t=0;t<guitarTypeCount;++t){juce::StringArray names;for(int i=0;i<modelsOfType(t);++i)names.add(models[(size_t)(modelFirst(t)+i)].name);
-  l.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{modelParams[(size_t)t],1},t==0?"modele acoustique":"modele electrique",names,defaultModel(t)));}
+ for(int t=0;t<guitarTypeCount;++t){juce::StringArray names;for(int i=0;i<modelsOfType(t);++i)names.add(juce::String(juce::CharPointer_UTF8(models[(size_t)(modelFirst(t)+i)].name)));
+  // A one-entry menu has an empty range (AU hosts read it as NaN): a single kit needs no parameter.
+  if(names.size()>1)l.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{modelParams[(size_t)t],1},t==0?"modele acoustique":"modele electrique",names,defaultModel(t)));}
  l.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{"chord",1},"strum chord",juce::StringArray(chordNames.data(),(int)chordNames.size()),0));
  for(auto& k:fxKnobs)l.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{k.id,1},k.id,percent,k.def));
  return l;}
@@ -32,10 +33,11 @@ void GuitarProcessor::selectModel(int type,int menuIndex){
 std::shared_ptr<const SampleLibrary> GuitarProcessor::loadModel(int index){
  for(auto& c:modelCache)if(c.first==index)return c.second;
  auto& m=models[(size_t)index];std::shared_ptr<const SampleLibrary> lib;
- for(int i=0;i<BinaryData::namedResourceListSize;++i)
-  if(juce::String(BinaryData::getNamedResourceOriginalFilename(BinaryData::namedResourceList[i]))==m.file){
-   int size=0;auto* data=BinaryData::getNamedResource(BinaryData::namedResourceList[i],size);
-   lib=SampleLibrary::single(data,(size_t)size,m.root,m.cents,juce::String(m.name)+juce::String(juce::CharPointer_UTF8(" — sample intégré")));break;}
+ // Every embedded FLAC of the kit: "Steel_E2_mf.flac", "Electric_A2_p_rr3.flac"...
+ const juce::String prefix=juce::String(m.kit)+"_";std::vector<SampleLibrary::Embedded> files;
+ for(int i=0;i<BinaryData::namedResourceListSize;++i){juce::String file(BinaryData::getNamedResourceOriginalFilename(BinaryData::namedResourceList[i]));
+  if(file.startsWith(prefix)){int size=0;auto* data=BinaryData::getNamedResource(BinaryData::namedResourceList[i],size);files.push_back({file,data,(size_t)size});}}
+ if(!files.empty())lib=SampleLibrary::kit(files,juce::String(juce::CharPointer_UTF8(m.name)));
  // A broken embedded file should never leave the plugin silent.
  if(!lib){if(!synth)synth=SampleLibrary::synth();return synth;}
  // Keep the few last models decoded so going back and forth is instant.

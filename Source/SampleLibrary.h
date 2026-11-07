@@ -17,8 +17,12 @@ public:
  // Octaves are shifted so the lowest note lands in C2..B2 (guitar low E = E2), whatever
  // naming convention (C3, C4 or C5 = middle C) the recording software used.
  static std::unique_ptr<SampleLibrary> load(const juce::File& folder,juce::String& report);
- // One embedded audio file (WAV, FLAC...) played across the whole keyboard: a built-in model.
+ // One embedded audio file (WAV, FLAC...) played across the whole keyboard.
  static std::unique_ptr<SampleLibrary> single(const void* data,size_t size,int note,float cents,const juce::String& name);
+ // A built-in multisampled kit: embedded files named like a folder library (Steel_E2_mf.flac).
+ // The whole kit is scaled to one peak, so its velocity layers keep their natural differences.
+ struct Embedded {juce::String fileName;const void* data=nullptr;size_t size=0;};
+ static std::unique_ptr<SampleLibrary> kit(const std::vector<Embedded>& files,const juce::String& name);
  // Karplus-Strong plucked strings, used until real samples are loaded.
  static std::unique_ptr<SampleLibrary> synth(double rate=44100);
 
